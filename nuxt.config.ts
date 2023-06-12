@@ -13,8 +13,7 @@ export default defineNuxtConfig({
         defaultLocale: "en", // default locale of your project for Nuxt pages and routings
         detectBrowserLanguage: {
           useCookie: true,
-          cookieKey: 'i18n_redirected',
-          redirectOn: 'root',  // recommended
+          alwaysRedirect: true
         }
     },
 });

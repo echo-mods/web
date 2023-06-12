@@ -1,33 +1,25 @@
 <script setup lang="ts">
 const { locale, setLocale } = useI18n()
-const localeCookie = useCookie("locale")
 
 const lang_dropdown = ref([
     [{
         label: 'English',
-        click: () => {
-            setLocale("en")
-        },
+        click: () => {},
         disabled: true
     }, {
         label: 'Русский',
-        click: () => {
-            setLocale("ru")
-        },
+        click: () => {},
         disabled: true
     }]
 ])
 
-if (typeof localeCookie.value === "string") { locale.value = localeCookie.value }
-
 watchEffect(() => {
-    localeCookie.value = locale.value
     if (locale.value === "en") {
         lang_dropdown.value = [
             [{
                 label: 'Русский',
                 click: () => {
-                    locale.value = "ru"
+                    setLocale("ru")
                 },
                 disabled: false
             }]
@@ -37,7 +29,7 @@ watchEffect(() => {
             [{
                 label: 'English',
                 click: () => {
-                    locale.value = "en"
+                    setLocale("en")
                 },
                 disabled: false
             }]

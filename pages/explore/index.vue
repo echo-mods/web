@@ -16,6 +16,19 @@ definePageMeta({
     <section id="explore">
         <div class="card" v-for="data in cards" @click="navigateTo(`/mods/${data['id']}`)">
             <img :src="data['imageURL']" class="background">
+            <div class="info-container">
+                <span>
+                    <Icon
+                        name="streamline:interface-favorite-star-reward-rating-rate-social-star-media-favorite-like-stars" />
+                    {{ data["rating"] }} / 10
+                </span>
+                <UPopover mode="hover" :popper="{ 'strategy': 'absolute' }">
+                    <h2>{{ data["description"] }}</h2>
+                    <template #panel>
+                        <p style="margin: 1rem; text-align: center;">{{ data["description"] }}</p>
+                    </template>
+                </UPopover>
+            </div>
             <h1>{{ data["name"] }}</h1>
         </div>
         <ClientOnly>
@@ -49,7 +62,8 @@ definePageMeta({
     transition: all 0.3s ease-in-out;
     display: flex;
     flex-direction: column-reverse;
-    padding: 2rem;
+    padding: 1.2rem;
+
     .background {
         position: absolute;
         width: 100%;
@@ -60,6 +74,22 @@ definePageMeta({
         object-fit: cover;
         object-position: center;
     }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .info-container {
+        height: 0;
+        opacity: 0;
+    }
+
+    h2 {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
     * {
         transition: all 0.3s ease-in-out;
     }
@@ -67,8 +97,10 @@ definePageMeta({
 
 .card:hover {
     box-shadow: 0 -6rem 5rem rgba(0, 0, 0, 0.8) inset;
-    h1 {
-        font-size: 1.5rem;
+
+    .info-container {
+        height: 3rem;
+        opacity: 1;
     }
 }
 
@@ -80,9 +112,12 @@ definePageMeta({
     display: flex;
     flex-direction: column;
     align-items: center;
+
     h1 {
         font-size: 2rem;
+        font-weight: 100;
     }
+
     img {
         width: 15rem;
     }
@@ -93,5 +128,4 @@ definePageMeta({
         width: calc(100%);
         aspect-ratio: 1.2;
     }
-}
-</style>
+}</style>

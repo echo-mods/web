@@ -7,11 +7,11 @@ definePageMeta({
 
 <template>
     <!-- Landing page -->
-    <main>
-        <section id="hero-container">
-            <h1>{{ $t("hello") }}</h1>
-        </section>
-    </main>
+    <section id="hero-container">
+        <h1>Echo Mods</h1>
+        <hr>
+        <h5 v-html="$t('hero_subtitle')"></h5>
+    </section>
 </template>
 
 <style lang="scss">
@@ -31,7 +31,20 @@ definePageMeta({
     padding: 1rem;
 
     h1 {
-        font-size: 4rem;
+        font-size: 5rem;
+        user-select: none;
+        font-weight: 800;
+    }
+
+    hr {
+        border: white 1px solid;
+        width: 25rem;
+        margin-bottom: 2rem;
+    }
+
+    h5 {
+        font-weight: 100;
+        user-select: none;
     }
 }
 </style>
