@@ -1,10 +1,18 @@
 <script setup lang="ts">
 const { locale } = useI18n()
 const route = useRoute()
+
+watchEffect(() => {
+    useHead({
+        title: locale.value === "en" ? `${route.meta.name}` : `${route.meta.ru_name}`,
+        titleTemplate: (titleChunk) => {
+            return titleChunk ? `${titleChunk} | EchoMods` : 'EchoMods';
+        }
+    })
+})
 </script>
 
 <template>
-    <title>{{ locale === "en" ? `${route.meta.name} | EchoMods` : `${route.meta.ru_name} | EchoMods` }}</title>
     <NuxtLayout>
         <NuxtPage />
     </NuxtLayout>

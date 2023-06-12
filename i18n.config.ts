@@ -2,10 +2,12 @@ export default defineI18nConfig(() => ({
     legacy: false,
     messages: {
         en: {
-            hello: "Hi!"
+            hello: "Hi!",
+            done: "No more mods..."
         },
         ru: {
-            hello: "Привет!"
+            hello: "Привет!",
+            done: "Всё!"
         },
     },
 }));

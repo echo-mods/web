@@ -6,16 +6,15 @@ definePageMeta({
 </script>
 
 <template>
+    <!-- Landing page -->
     <main>
         <section id="hero-container">
-            <div class="blur-backdrop">
-                <h1>{{ $t("hello") }}</h1>
-            </div>
+            <h1>{{ $t("hello") }}</h1>
         </section>
     </main>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 #hero-container {
     margin: 0.75rem;
     border-radius: 8px;
