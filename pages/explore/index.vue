@@ -15,9 +15,9 @@ definePageMeta({
     <!-- Page containing mods -->
     <section id="explore">
         <div class="card" v-for="data in cards" @click="navigateTo(`/mods/${data['id']}`)">
-            <img :src="data['imageURL']" class="background">
+            <img v-once :src="data['imageURL']" class="background">
             <div class="info-container">
-                <span>
+                <span v-once>
                     <Icon
                         name="streamline:interface-favorite-star-reward-rating-rate-social-star-media-favorite-like-stars" />
                     {{ data["rating"] }} / 10
@@ -25,7 +25,7 @@ definePageMeta({
                 <UPopover mode="hover" :popper="{ 'strategy': 'absolute' }">
                     <h2>{{ data["description"] }}</h2>
                     <template #panel>
-                        <p style="margin: 1rem; text-align: center;">{{ data["description"] }}</p>
+                        <p v-once style="margin: 1rem; text-align: center;">{{ data["description"] }}</p>
                     </template>
                 </UPopover>
             </div>
@@ -46,14 +46,14 @@ definePageMeta({
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
-    z-index: -1;
+    z-index: -5;
 }
 
 .card {
+    border: 1px rgba(255, 255, 255, 0.3) solid;
     width: calc((100% - 2rem) / 3);
     aspect-ratio: 1.6;
     border-radius: 8px;
-    border: 1px rgba(255, 255, 255, 0.3) solid;
     padding: 0 1rem;
     position: relative;
     overflow: hidden;

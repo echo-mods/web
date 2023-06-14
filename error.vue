@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const props = defineProps(["error"])
+const router = useRouter()
 
 const handleError = () => clearError({ redirect: '/' })
 
@@ -10,9 +11,11 @@ const handleError = () => clearError({ redirect: '/' })
         <h1>{{ error.statusCode }}</h1>
         <p v-if="error.statusCode === 404">{{ $t("err_nf") }}</p>
         <p v-else>{{ error.statusMessage }}</p>
-        <button @click="handleError">
-            <div>{{ $t("err_button") }}</div>
-        </button>
+        <NuxtLink>
+            <button @click="handleError">
+                <div>{{ $t("err_button") }}</div>
+            </button>
+        </NuxtLink>
     </main>
 </template>
 
