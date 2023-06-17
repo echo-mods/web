@@ -4,17 +4,25 @@ definePageMeta({
     ru_name: 'Войти'
 })
 
+const { locale } = useI18n()
 const { api_endpoint } = useAppConfig()
 const code = ref("")
 
 const submitted = ref(false)
+const toast = useToast()
+const SessionCookie = useCookie("SESSION_KEY")
 
 const authenticate = async () => {
     submitted.value = true
-    const { data } = await useFetch(`${api_endpoint}login?code=${code.value}`, {
+    const { data } = await useFetch(`${api_endpoint}login`, {
         method: "POST",
+        query: {
+            code: code.value
+        }
     })
-    console.log(data.value)
+    const { session, user } = data.value
+    SessionCookie.value = session
+    toast.add({ title: `${locale.value === "en" ? "Welcome" : "Добро пожаловать"} ${user.first_name} ${user.last_name}!` })
 }
 
 defineShortcuts({

@@ -1,14 +1,11 @@
 <script setup lang="ts">
 definePageMeta({
     name: 'Dashboard',
-    ru_name: 'Личный Кабинет'
+    ru_name: 'Личный Кабинет',
+    middleware: 'auth'
 })
 </script>
 
-<template>
+<template></template>
 
-</template>
-
-<style lang="scss">
-
-</style>
+<style lang="scss"></style>
