@@ -1,7 +1,5 @@
 <script setup lang="ts">
 definePageMeta({
-    name: 'Mod',
-    ru_name: 'Мод',
     validate: async (route) => {
         const { api_endpoint } = useAppConfig()
         const { data } = await useFetch(`${api_endpoint}mods/${route.params.id}`)
@@ -13,6 +11,11 @@ definePageMeta({
 const route = useRoute()
 const { api_endpoint } = useAppConfig()
 const { data } = await useFetch(`${api_endpoint}mods/${route.params.id}`)
+
+useHead({
+  title: data.value.name,
+  titleTemplate: '%s | EchoMods',
+})
 </script>
 
 <template>
@@ -41,7 +44,7 @@ const { data } = await useFetch(`${api_endpoint}mods/${route.params.id}`)
                 <Icon name="carbon:thumbs-up" />
                 <span>{{ $t("req_false") }}</span>
             </p>
-            <a :href="data.downloadURL" target="_blank">
+            <a name="torrent-link" :href="data.downloadURL" target="_blank">
                 <button v-if="data.downloadURL.startsWith('magnet:')">
                     <div>
                         <Icon name="fluent-emoji-flat:magnet" />
@@ -129,10 +132,6 @@ const { data } = await useFetch(`${api_endpoint}mods/${route.params.id}`)
 }
 
 @media (max-width: 600px) {
-    .yt-embed {
-        width: 100%;
-    }
-
     .data-container {
         width: 100%;
     }
