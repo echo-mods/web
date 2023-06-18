@@ -14,7 +14,7 @@ definePageMeta({
 <template>
     <!-- Page containing mods -->
     <section id="explore">
-        <div class="card" v-for="data in cards" @click="navigateTo(`/mods/${data['id']}`)">
+        <NuxtLink class="card" tag="div" v-for="data in cards" :to="`/mods/${data['id']}`">
             <img v-once :src="data['imageURL']" class="background">
             <div class="info-container">
                 <span v-once>
@@ -30,7 +30,7 @@ definePageMeta({
                 </UPopover>
             </div>
             <h1>{{ data["name"] }}</h1>
-        </div>
+        </NuxtLink>
         <ClientOnly>
             <div class="done">
                 <img v-if="locale === 'ru'" src="/done.png">

@@ -22,7 +22,9 @@ useHead({
     <section id="mod-details">
         <ContentSlideshow :content="data.content" />
         <div class="data-container">
-            <img class="logo" src="" alt="IMG tag">
+            <a :href="data.socialLink">
+                <img class="logo" :src="data.logoURL" alt="IMG tag">
+            </a>
             <img class="background" :src="data.imageURL">
             <h1 v-once>{{ data.name }}</h1>
             <hr>

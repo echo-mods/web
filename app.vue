@@ -13,8 +13,15 @@ watchEffect(() => {
 </script>
 
 <template>
+    <input type="file" id="file_upload" />
     <NuxtLayout>
         <NuxtPage />
         <UNotifications />
     </NuxtLayout>
 </template>
+
+<style scoped>
+#file_upload {
+    display: none;
+}
+</style>

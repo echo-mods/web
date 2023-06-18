@@ -12,9 +12,11 @@ const submitted = ref(false)
 const toast = useToast()
 const SessionCookie = useCookie("SESSION_KEY")
 
+const router = useRouter()
+
 const authenticate = async () => {
     submitted.value = true
-    const { data } = await useFetch(`${api_endpoint}login`, {
+    const { data, error } = await useFetch(`${api_endpoint}login`, {
         method: "POST",
         query: {
             code: code.value
@@ -23,6 +25,7 @@ const authenticate = async () => {
     const { session, user } = data.value
     SessionCookie.value = session
     toast.add({ title: `${locale.value === "en" ? "Welcome" : "Добро пожаловать"} ${user.first_name} ${user.last_name}!` })
+    router.push("/dashboard")
 }
 
 defineShortcuts({
@@ -41,7 +44,7 @@ defineShortcuts({
         <hr>
         <h2>{{ $t("step_1") }}</h2>
         <a href="tg://resolve?domain=echomods_bot">
-            <UButton>
+            <UButton color="white">
                 <Icon name="jam:telegram" />{{ $t("start_bot") }}
             </UButton>
         </a>
@@ -50,7 +53,7 @@ defineShortcuts({
         <UFormGroup :label="$t('code')">
             <UInput :disabled="submitted" type="number" icon="i-heroicons-key" v-model="code" />
         </UFormGroup>
-        <UButton :icon="submitted ? '' : `i-heroicons-arrow-right-on-rectangle`" @click="authenticate" :loading="submitted"
+        <UButton color="white" :icon="submitted ? '' : `i-heroicons-arrow-right-on-rectangle`" @click="authenticate" :loading="submitted"
             :disabled="code.length < 6" :label="submitted ? $t('logging_in') : $t('login')"></UButton>
     </div>
 </template>

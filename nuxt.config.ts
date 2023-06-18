@@ -7,6 +7,9 @@ export default defineNuxtConfig({
         '@nuxthq/ui',
         'nuxt-icon'
     ],
+    app: {
+      pageTransition: { name: 'page', mode: 'out-in' }
+    },
     i18n: {
         strategy: "no_prefix",
         locales: ["en", "ru"], // used in URL path prefix

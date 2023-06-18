@@ -24,11 +24,6 @@ const setSlide = (value: number) => {
 
 const trimmedID = computed(() => (slideID.value + (props.content || "").length * 100000) % (props.content || "").length)
 
-// Automatic slide switching
-
-const playing = ref(true)
-const waiting = ref(true)
-
 const handleKeypress = (event: any) => {
   if (event.key === "ArrowRight") {
     incrementSlide(1)
@@ -37,40 +32,18 @@ const handleKeypress = (event: any) => {
   }
 }
 
-let timeout: NodeJS.Timeout;
-
-function debouncedCycle() {
-  waiting.value = false
-  playing.value = true
-  timeout = setTimeout(() => {
-    incrementSlide(1)
-    debouncedCycle()
-  }, 5000);
-  setTimeout(() => {
-    waiting.value = true
-  }, 100);
-}
-
-function clearCycle() {
-  playing.value = false
-  if (timeout) { clearTimeout(timeout) }
-}
-
 onMounted(() => {
   window.addEventListener("keydown", handleKeypress)
-  debouncedCycle()
 })
 
 onUnmounted(() => {
   window.removeEventListener("keydown", handleKeypress)
-  clearCycle()
 })
 </script>
 
 <template>
   <ClientOnly>
     <div class="content-container" @mouseenter="clearCycle" @mouseleave="debouncedCycle">
-      <div :class="{ waiting: waiting && playing, playing: playing }" class="progress-bar"></div>
       <!-- Slidshow controls -->
       <div class="slideshow-controls">
         <button class="right" @click="incrementSlide(-1)">&lt;</button>
