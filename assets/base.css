@@ -17,6 +17,7 @@ body {
 
 h1,h2,h3,h4,h5,h6,p,span,img,button {
     font-family: "Roboto", sans-serif;
+    color: white;
 }
 
 #headlessui-menu-items-90 {

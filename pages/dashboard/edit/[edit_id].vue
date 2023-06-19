@@ -24,6 +24,14 @@ const fields = [
         description: "",
         ru_label: "Название",
         ru_description: "",
+        icon: "i-heroicons-light-bulb-solid"
+    },
+    {
+        index: "description",
+        label: "Description",
+        description: "",
+        ru_label: "Описание",
+        ru_description: "",
         icon: "i-heroicons-bars-3-bottom-left-20-solid"
     }
 ]
