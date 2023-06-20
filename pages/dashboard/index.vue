@@ -24,7 +24,9 @@ const { mods } = data.value
     <section id="dashboard">
         <h5 class="section-heading">{{ $t("lk_actions") }}</h5>
         <div class="actions">
-            <UButton color="white" @click="uploadMod"><Icon name="solar:upload-minimalistic-linear"/>{{ $t("upload_mod") }}</UButton>
+            <UTooltip :text="$t('mod_upload_info')">
+                <UButton color="white" @click="uploadMod"><Icon name="solar:upload-minimalistic-linear"/>{{ $t("upload_mod") }}</UButton>
+            </UTooltip>
         </div>
         <hr>
         <h5 class="section-heading">{{ $t("lk_mods") }}</h5>
@@ -32,7 +34,9 @@ const { mods } = data.value
             <h2 v-if="mods && mods.length === 0" class="empty">{{ $t("nomods") }}</h2>
             <div class="mod" v-for="mod in mods">
                 <h1>{{ mod.name }}</h1>
-                <UButton class="edit" color="white">{{ $t("edit") }}</UButton>
+                <NuxtLink :to="`/dashboard/edit/${mod.id}`" class="edit">
+                    <UButton color="white">{{ $t("edit") }}</UButton>
+                </NuxtLink>
             </div>
         </div>
     </section>

@@ -23,6 +23,7 @@ export default defineI18nConfig(() => ({
             edit: "Edit",
             save_changes: "Save changes",
             make_changes: "Edit mod",
+            mod_upload_info: "A .zip archive containing the mod",
         },
         ru: {
             hero_subtitle: "Привет!",
@@ -46,6 +47,7 @@ export default defineI18nConfig(() => ({
             edit: "Редактировать",
             save_changes: "Сохранить",
             make_changes: "Редактировать мод",
+            mod_upload_info: ".zip архив с файлами мода",
         },
     },
 }));

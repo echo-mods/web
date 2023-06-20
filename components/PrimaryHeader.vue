@@ -14,6 +14,12 @@ const links = [
         route: "/explore"
     }
 ]
+
+const profile_menu = [
+    [
+        
+    ]
+]
 </script>
 
 <template>
@@ -26,7 +32,12 @@ const links = [
                 <span :class="{ current: route.fullPath === link.route }">{{ locale === "en" ? link.text : link.ru_text }}</span>
             </NuxtLink>
         </div>
-        <LangSwitcher />
+        <div class="left">
+            <LangSwitcher />
+            <UDropdown :items="profile_menu" :popper="{ placement: 'bottom-start' }">
+                <UAvatar alt="Benjamin Canac" />
+            </UDropdown>
+        </div>
     </header>
 </template>
 
@@ -56,5 +67,11 @@ header {
 }
 .links span.current {
     opacity: 1;
+}
+
+.left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 </style>

@@ -10,11 +10,13 @@ definePageMeta({
 // Page setup finished
 const route = useRoute()
 const { api_endpoint } = useAppConfig()
-const { data } = await useFetch(`${api_endpoint}mods/${route.params.id}`)
+const { data } = await useFetch(`${api_endpoint}mods/${route.params.id}`)   
 
-useHead({
-  title: data.value.name,
-  titleTemplate: '%s | EchoMods',
+watchEffect(async () => {
+    useHead({
+        title: data.value.name,
+        titleTemplate: '%s | EchoMods',
+    })
 })
 </script>
 
