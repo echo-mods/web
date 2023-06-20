@@ -1,8 +1,31 @@
+<script setup lang="ts">
+const { locale } = useI18n()
+const route = useRoute()
+
+const links = [
+    {
+        text: "Home",
+        ru_text: "Домашняя",
+        route: "/"
+    },
+    {
+        text: "Explore",
+        ru_text: "Моды",
+        route: "/explore"
+    }
+]
+</script>
+
 <template>
     <header>
         <NuxtLink to="/">
             <img src="/favicon.ico" alt="Logo">
         </NuxtLink>
+        <div class="links">
+            <NuxtLink v-for="link in links" :to="link.route">
+                <span :class="{ current: route.fullPath === link.route }">{{ locale === "en" ? link.text : link.ru_text }}</span>
+            </NuxtLink>
+        </div>
         <LangSwitcher />
     </header>
 </template>
@@ -20,5 +43,18 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.links {
+    display: flex;
+    gap: 1rem;
+}
+.links span {
+    font-weight: 300;
+    opacity: 0.75;
+    transition: all 0.5s;
+}
+.links span.current {
+    opacity: 1;
 }
 </style>

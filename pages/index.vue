@@ -10,7 +10,7 @@ definePageMeta({
     <section id="hero-container">
         <h1>Echo Mods</h1>
         <hr>
-        <h5 v-html="$t('hero_subtitle')"></h5>
+        <h5>{{ $t('hero_subtitle') }}</h5>
     </section>
 </template>
 
