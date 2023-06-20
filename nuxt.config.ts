@@ -15,4 +15,7 @@ export default defineNuxtConfig({
           useCookie: true,
         }
     },
+    colorMode: {
+      preference: 'dark'
+    }
 });
