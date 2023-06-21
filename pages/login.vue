@@ -14,6 +14,8 @@ const SessionCookie = useCookie("SESSION_KEY")
 
 const router = useRouter()
 
+const login_error = ref("")
+
 const authenticate = async () => {
     submitted.value = true
     const { data, error } = await useFetch(`${api_endpoint}login`, {
@@ -22,6 +24,11 @@ const authenticate = async () => {
             code: code.value
         }
     })
+    if (error.value) {
+        login_error.value = "login_error"
+        submitted.value = false
+        return
+    }
     const { session, user } = data.value
     SessionCookie.value = session
     toast.add({ title: `${locale.value === "en" ? "Welcome" : "Добро пожаловать"} ${user.first_name} ${user.last_name}!` })
@@ -50,7 +57,7 @@ defineShortcuts({
         </a>
         <hr>
         <h2>{{ $t("step_2") }}</h2>
-        <UFormGroup :label="$t('code')">
+        <UFormGroup :label="$t('code')" :error="$t(login_error)">
             <UInput :disabled="submitted" type="number" icon="i-heroicons-key" v-model="code" />
         </UFormGroup>
         <UButton color="white" :icon="submitted ? '' : `i-heroicons-arrow-right-on-rectangle`" @click="authenticate" :loading="submitted"

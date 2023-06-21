@@ -4,11 +4,11 @@ const { locale, setLocale } = useI18n()
 const lang_dropdown = ref([
     [{
         label: 'English',
-        click: () => {},
+        click: () => { },
         disabled: true
     }, {
         label: 'Русский',
-        click: () => {},
+        click: () => { },
         disabled: true
     }]
 ])
@@ -40,12 +40,17 @@ watchEffect(() => {
 </script>
 
 <template>
-    <UDropdown :items="lang_dropdown" :popper="{ placement: 'bottom-start', strategy: 'absolute' }">
-        <UButton color="white" :label="locale === 'en' ? 'English' : 'Русский'" icon="i-heroicons-flag-solid">
-            <template #leading>
-                <Icon name="emojione:flag-for-russia" v-if="locale === 'ru'" />
-                <Icon name="emojione:flag-for-united-states" v-else="locale === 'en'" />
-            </template>
-        </UButton>
-    </UDropdown>
+    <ClientOnly>
+        <UDropdown :items="lang_dropdown" :popper="{ placement: 'bottom-start', strategy: 'absolute' }">
+            <UButton color="white" :label="locale === 'en' ? 'English' : 'Русский'">
+                <template #leading>
+                    <Icon name="emojione:flag-for-russia" v-if="locale === 'ru'" />
+                    <Icon name="emojione:flag-for-united-states" v-else="locale === 'en'" />
+                </template>
+            </UButton>
+        </UDropdown>
+        <template #fallback>
+            <UButton color="white" label="..."></UButton>
+        </template>
+    </ClientOnly>
 </template>

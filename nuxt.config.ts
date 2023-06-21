@@ -9,8 +9,8 @@ export default defineNuxtConfig({
     ],
     i18n: {
         strategy: "no_prefix",
-        locales: ["en", "ru"], // used in URL path prefix
-        defaultLocale: "en", // default locale of your project for Nuxt pages and routings
+        locales: ["ru", "en"], // used in URL path prefix
+        defaultLocale: "ru", // default locale of your project for Nuxt pages and routings
         detectBrowserLanguage: {
           useCookie: true,
         }
