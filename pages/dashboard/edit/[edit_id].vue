@@ -29,7 +29,7 @@ const fields = [
     {
         index: "description",
         label: "Description",
-        description: "",
+        description: "", 
         ru_label: "Описание",
         ru_description: "",
         icon: "i-heroicons-bars-3-bottom-left-20-solid"
