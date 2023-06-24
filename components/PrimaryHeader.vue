@@ -107,6 +107,11 @@ header {
         position: relative;
         width: 2.8rem;
         aspect-ratio: 1;
+        transition: all 0.3s;
+    }
+    .home:hover {
+        transform: translateY(0.2rem);
+        transition: all 0.6s;
     }
     .primary {
         position: absolute;
