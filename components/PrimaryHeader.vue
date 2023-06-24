@@ -69,8 +69,12 @@ const show_profile_dropdown = true
 
 <template>
     <header>
-        <NuxtLink to="/">
-            <img class="logo" src="/favicon.ico" alt="Logo">
+        <NuxtLink to="/" class="home">
+            <img class="primary" src="/logo.png">
+            <img class="shadow" src="/logo.png">
+            <img class="shadow" src="/logo.png">
+            <img class="shadow" src="/logo.png">
+            <img class="shadow" src="/logo.png">
         </NuxtLink>
         <div class="links">
             <NuxtLink v-for="link in links" :to="link.route">
@@ -99,9 +103,57 @@ header {
     padding: 0 1rem;
     display: flex;
     align-items: center;
-    .logo {
-        width: 2.5rem;
-        
+    .home {
+        position: relative;
+        width: 2.8rem;
+        aspect-ratio: 1;
+    }
+    .primary {
+        position: absolute;
+        aspect-ratio: 1;
+        transform: none;
+        transition: all 0.3s ease-in-out;
+        cursor: pointer;
+        z-index: 2;
+    }
+
+    .primary:hover {
+        transform: rotate3d(1, -1, 0.5, 25deg);
+        transition: all 0.3s ease-in-out;
+    }
+
+    .shadow {
+        position: absolute;
+        transform: none;
+        transition: all 1s;
+        pointer-events: none;
+        opacity: 0;
+        aspect-ratio: 1;
+        pointer-events: none;
+    }
+
+    .home:has(.primary:hover) .shadow:nth-child(2) {
+        transition-delay: 50ms;
+        transform: rotate3d(1, -1, 0.5, 25deg) translate(-8%, -8%);
+        opacity: 0.4;
+    }
+
+    .home:has(.primary:hover) .shadow:nth-child(3) {
+        transition-delay: 100ms;
+        transform: rotate3d(1, -1, 0.5, 25deg) translate(-16%, -16%);
+        opacity: 0.3;
+    }
+
+    .home:has(.primary:hover) .shadow:nth-child(4) {
+        transition-delay: 150ms;
+        transform: rotate3d(1, -1, 0.5, 25deg) translate(-24%, -24%);
+        opacity: 0.2;
+    }
+
+    .home:has(.primary:hover) .shadow:nth-child(5) {
+        transition-delay: 200ms;
+        transform: rotate3d(1, -1, 0.5, 25deg) translate(-32%, -32%);
+        opacity: 0.1;
     }
 }
 
@@ -151,7 +203,7 @@ header {
     gap: 1rem;
     margin-left: auto;
 }
+
 .profile-btn {
     border: 1px rgba(255, 255, 255, 0.3) solid;
-}
-</style>
+}</style>
