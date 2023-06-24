@@ -70,7 +70,7 @@ const show_profile_dropdown = true
 <template>
     <header>
         <NuxtLink to="/">
-            <img src="/favicon.ico" alt="Logo">
+            <img class="logo" src="/favicon.ico" alt="Logo">
         </NuxtLink>
         <div class="links">
             <NuxtLink v-for="link in links" :to="link.route">
@@ -99,6 +99,10 @@ header {
     padding: 0 1rem;
     display: flex;
     align-items: center;
+    .logo {
+        width: 2.5rem;
+        
+    }
 }
 
 .links {
@@ -108,11 +112,12 @@ header {
 }
 
 .links span {
-    font-weight: 300;
+    font-weight: 500;
     opacity: 0.75;
     transition: all 0.5s;
     position: relative;
     color: white;
+    text-transform: uppercase;
 
     &::before {
         content: "";
