@@ -19,5 +19,8 @@
     "nuxt": "^3.5.2",
     "nuxt-icon": "^0.4.1",
     "sass": "^1.63.3"
+  },
+  "dependencies": {
+    "nuxt-appwrite": "^1.0.4"
   }
 }
