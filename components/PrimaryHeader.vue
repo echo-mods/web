@@ -78,7 +78,7 @@ const show_profile_dropdown = true
                 }}</span>
             </NuxtLink>
         </div>
-        <div class="left">
+        <div class="right">
             <LangSwitcher />
             <UDropdown v-if="show_profile_dropdown" :items="profile_menu" :popper="{ placement: 'bottom-start' }">
                 <UAvatar class="profile-btn" alt="Benjamin Canac" />
@@ -98,13 +98,13 @@ header {
     box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.8);
     padding: 0 1rem;
     display: flex;
-    justify-content: space-between;
     align-items: center;
 }
 
 .links {
     display: flex;
     gap: 1rem;
+    margin-left: 2rem;
 }
 
 .links span {
@@ -112,6 +112,7 @@ header {
     opacity: 0.75;
     transition: all 0.5s;
     position: relative;
+    color: white;
 
     &::before {
         content: "";
@@ -139,10 +140,11 @@ header {
     }
 }
 
-.left {
+.right {
     display: flex;
     align-items: center;
     gap: 1rem;
+    margin-left: auto;
 }
 .profile-btn {
     border: 1px rgba(255, 255, 255, 0.3) solid;
