@@ -45,7 +45,7 @@ main {
             border-radius: 8px;
             transition: all 0.3s;
         }
-        background: linear-gradient(55deg, rgba(30,255,0,1) 0%, rgba(0,212,255,1) 100%);
+        background: linear-gradient(55deg, #ff7300 0%, rgb(0, 0, 0) 100%);
     }
     button:hover {
         div {

@@ -63,6 +63,7 @@ watchEffect(async () => {
 <style lang="scss">
 #mod-details {
     margin: 0.75rem;
+    width: calc(100% - 1.5rem);
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;

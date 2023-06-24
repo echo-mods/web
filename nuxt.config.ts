@@ -5,7 +5,8 @@ export default defineNuxtConfig({
     modules: [
         "@nuxtjs/i18n",
         '@nuxthq/ui',
-        'nuxt-icon'
+        'nuxt-icon',
+        '@nuxt/content'
     ],
     i18n: {
         strategy: "no_prefix",

@@ -43,7 +43,7 @@ onUnmounted(() => {
 
 <template>
   <ClientOnly>
-    <div class="content-container" @mouseenter="clearCycle" @mouseleave="debouncedCycle">
+    <div class="content-container">
       <!-- Slidshow controls -->
       <div class="slideshow-controls">
         <button class="right" @click="incrementSlide(-1)">&lt;</button>

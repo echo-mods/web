@@ -45,6 +45,7 @@ const { mods } = data.value
 <style scoped lang="scss">
 #dashboard {
     padding: 0 0.75rem;
+    width: calc(100%);
     .section-heading {
         margin: 1rem;
         font-size: 2rem;

@@ -8,6 +8,16 @@ const links = [
         ru_text: "Домашняя",
         route: "/"
     },
+    /*{
+        text: "News",
+        ru_text: "Новости",
+        route: "/news"
+    },*/
+    {
+        text: "Roadmap",
+        ru_text: "Планы",
+        route: "/roadmap"
+    },
     {
         text: "Explore",
         ru_text: "Моды",
@@ -53,7 +63,8 @@ watchEffect(() => {
         ]
     ]
 })
-
+// !!!
+const show_profile_dropdown = true
 </script>
 
 <template>
@@ -69,7 +80,7 @@ watchEffect(() => {
         </div>
         <div class="left">
             <LangSwitcher />
-            <UDropdown :items="profile_menu" :popper="{ placement: 'bottom-start' }">
+            <UDropdown v-if="show_profile_dropdown" :items="profile_menu" :popper="{ placement: 'bottom-start' }">
                 <UAvatar class="profile-btn" alt="Benjamin Canac" />
             </UDropdown>
         </div>

@@ -17,6 +17,7 @@ definePageMeta({
 <style lang="scss">
 #hero-container {
     margin: 0.75rem;
+    width: calc(100% - 1.5rem);
     border-radius: 8px;
     outline: 1px rgba(255, 255, 255, 0.3) solid;
     box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.8);

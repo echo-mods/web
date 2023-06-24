@@ -50,6 +50,7 @@ const fields = [
 <style scoped lang="scss">
 #edit-mod {
     padding: 0.75rem;
+    width: calc(100% - 4rem);
     background-color: rgba(255,255,255, 0.01);
     backdrop-filter: blur(1px);
     margin: 1rem 2rem;
