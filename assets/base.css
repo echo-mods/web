@@ -16,6 +16,10 @@ body {
     width: 100%;
 }
 
+.bg-gray-100, .bt-white {
+    background: #171717;
+}
+
 section {
     position: absolute;
     z-index: -100;

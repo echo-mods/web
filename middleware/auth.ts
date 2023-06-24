@@ -6,7 +6,7 @@ export default defineNuxtRouteMiddleware(async () => {
             session: SessionCookie.value,
         },
     });
-    if (!data.value.valid) {
+    if (!data.value || !data.value.valid) {
         return navigateTo("/login");
     }
 });
