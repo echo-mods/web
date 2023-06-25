@@ -37,9 +37,8 @@ const slides = [
     {
         background: "https://www.stalker2.com/_nuxt/img/assets/pages/game/the_danger/03.jpg",
         title: {
-            data: "https://www.stalker2.com/_nuxt/img/assets/reusable/logos/S2_logo.png",
-            type: "image",
-            width: "30%"
+            data: "S.T.A.L.K.E.R. 2: Heart Of Chernobyl",
+            type: "text"
         },
         subtitle: "",
         content: "Шойгу, Герасимов! ГДЕ БЛЯТЬ БОЕПРИПАСЫ?!",
