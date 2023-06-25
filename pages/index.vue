@@ -15,7 +15,7 @@ const slides = [
         content: "",
         image_filters: "brightness(0.4)",
         action: {
-            text: "Подробнее",
+            text: "Скачать",
             onClick: () => {
 
             }
@@ -30,12 +30,17 @@ const slides = [
         },
         subtitle: "Новые скриншоты с разработки",
         content: "Опубликованы новые скриншоты разрабатываемого мода «Shadow Of Chernobyl Update».",
-        action: {
-            text: "Подробнее",
-            onClick: () => {
-                console.log("Bruh")
-            }
+        id: 0
+    },
+    {
+        background: "https://www.stalker2.com/_nuxt/img/assets/pages/game/the_danger/03.jpg",
+        title: {
+            data: "https://www.stalker2.com/_nuxt/img/assets/reusable/logos/S2_logo.png",
+            type: "image",
+            width: "30%"
         },
+        subtitle: "",
+        content: "Шойгу, Герасимов! ГДЕ БЛЯТЬ БОЕПРИПАСЫ?!",
         id: 0
     }
 ]
@@ -55,20 +60,23 @@ const currentData = computed(() => {
             <img :style="{filter: currentData.image_filters}" :key="currentData.id" class="background" :src="currentData.background" :alt="currentData.title">
         </Transition>
         <Transition name="primary" mode="out-in">
-            <h1 v-if="currentData.title.type === 'text'" :key="currentData.id" class="title">{{ currentData.title.data }}</h1>
+            <img v-if="currentData.title.type === 'image'" :key="currentData.id + 1" class="primary-image" :src="currentData.title.data" :style="{width: currentData.title.width}" />
         </Transition>
         <Transition name="primary" mode="out-in">
-            <img v-if="currentData.title.type === 'image'" :key="currentData.id + 1" class="primary-image" :src="currentData.title.data" />
+            <h1 v-if="currentData.title.type === 'text'" :key="currentData.id" class="title">{{ currentData.title.data }}</h1>
         </Transition>
         <Transition name="secondary" mode="out-in">
             <div :key="currentData.id" class="secondary-content">
                 <h2 class="subtitle">{{ currentData.subtitle }}</h2>
                 <p class="content">{{ currentData.content }}</p>
-                <button class="action" @click="currentData.action.onClick">
+                <button v-if="currentData.action" class="action" @click="currentData.action.onClick">
                     {{ currentData.action.text }}
                 </button>
             </div>
         </Transition>
+        <div class="picker">
+
+        </div>
     </section>
 </template>
 
@@ -76,8 +84,7 @@ const currentData = computed(() => {
 #hero-container {
     margin: 0 5%;
     width: calc(90%);
-    border-radius: 8px;
-    outline: 1px rgba(255, 255, 255, 0.3) solid;
+    border-radius: 1rem;
     box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.8);
     background-size: cover;
     background-position: center;
@@ -97,6 +104,7 @@ const currentData = computed(() => {
         object-fit: cover;
         filter: brightness(0.5);
         z-index: -1;
+        border-radius: inherit;
     }
     .title {
         font-size: 2.5rem;
