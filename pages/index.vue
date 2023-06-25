@@ -20,6 +20,7 @@ const slides = [
 
             }
         },
+        short_title: "Expedition",
         id: 0
     },
     {
@@ -28,9 +29,10 @@ const slides = [
             data: "Shadow Of Chernobyl Update",
             type: "text"
         },
+        image_filters: "brightness(0.4)",
         subtitle: "Новые скриншоты с разработки",
         content: "Опубликованы новые скриншоты разрабатываемого мода «Shadow Of Chernobyl Update».",
-        id: 0
+        short_title: "SOC Update",
     },
     {
         background: "https://www.stalker2.com/_nuxt/img/assets/pages/game/the_danger/03.jpg",
@@ -41,7 +43,7 @@ const slides = [
         },
         subtitle: "",
         content: "Шойгу, Герасимов! ГДЕ БЛЯТЬ БОЕПРИПАСЫ?!",
-        id: 0
+        short_title: "S.T.A.L.K.E.R. 2",
     }
 ]
 const currentIndex = ref(0)
@@ -51,16 +53,31 @@ const currentData = computed(() => {
     gotObject.id = currentIndex.value
     return gotObject
 })
+
+let Timeout: NodeJS.Timeout | undefined
+
+const setIndex = (index: number) => {
+    currentIndex.value = index
+    if (Timeout) { clearTimeout(Timeout); Timeout = undefined }
+    Timeout = setTimeout(() => {
+        setIndex(currentIndex.value + 1)
+    }, 5200);
+}
+
+setIndex(0)
+
+onMounted(() => {
+    setIndex(1)
+});
 </script>
 
 <template>
-    <button @click="currentIndex++">Test</button>
     <section id="hero-container">
         <Transition name="image" mode="out-in">
             <img :style="{filter: currentData.image_filters}" :key="currentData.id" class="background" :src="currentData.background" :alt="currentData.title">
         </Transition>
         <Transition name="primary" mode="out-in">
-            <img v-if="currentData.title.type === 'image'" :key="currentData.id + 1" class="primary-image" :src="currentData.title.data" :style="{width: currentData.title.width}" />
+            <img v-if="currentData.title.type === 'image'" :key="(currentData.id || 0) + 1" class="primary-image" :src="currentData.title.data" :style="{width: currentData.title.width}" />
         </Transition>
         <Transition name="primary" mode="out-in">
             <h1 v-if="currentData.title.type === 'text'" :key="currentData.id" class="title">{{ currentData.title.data }}</h1>
@@ -74,8 +91,14 @@ const currentData = computed(() => {
                 </button>
             </div>
         </Transition>
-        <div class="picker">
-
+        <div class="cards">
+            <div class="card" v-for="(data, index) in slides" @click="setIndex(index)" :style="{height: `calc(${100 / slides.length}% - ${slides.length}rem)`}">
+                <img class="background" :src="data.background" />
+                <div class="overlay" :class="{current: index === currentIndex}"></div>
+                <div class="data">
+                    <p class="title">{{ data.short_title }}</p>
+                </div>
+            </div>
         </div>
     </section>
 </template>
@@ -95,18 +118,88 @@ const currentData = computed(() => {
     padding: 4rem;
     overflow: hidden;
 
-    .background {
+    .cards {
+        position: absolute;
+        right: 5%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        .card {
+            position: relative;
+            user-select: none;
+            background-color: rgb(0, 0, 0);
+            border-radius: 8px;
+            aspect-ratio: 2.5;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.8);
+            overflow: hidden;
+            .overlay {
+                position: absolute;
+                width: 0;
+                height: 100%;
+                left: 0;
+                top: 0;
+                border-radius: inherit;
+                backdrop-filter: blur(0.1rem) brightness(0.4);
+                transition-property: width, opacity;
+                transition-duration: 0.3s, 0.3s;
+                transition-timing-function: linear;
+                opacity: 0;
+            }
+            .overlay.current {
+                width: 100%;
+                opacity: 1;
+                transition-property: width, opacity;
+                transition-duration: 5s, 0.3s;
+                transition-timing-function: linear;
+            }
+            .background {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                left: 0;
+                top: 0;
+                object-fit: cover;
+                border-radius: inherit;
+                filter: brightness(0.6);
+            }
+            .data {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                left: 0;
+                top: 0;
+                z-index: 2;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                .title {
+                    font-size: 1rem;
+                    width: 100%;
+                    flex-grow: 2;
+                    text-align: center;
+                    font-weight: 800;
+                }
+            }
+        }
+        .card:hover {
+            transform: scale(1.1);
+        }
+    }
+
+    > .background {
         position: absolute;
         width: 100%;
         height: 100%;
         left: 0;
         top: 0;
         object-fit: cover;
-        filter: brightness(0.5);
         z-index: -1;
         border-radius: inherit;
     }
-    .title {
+    > .title {
         font-size: 2.5rem;
         max-width: calc(75% - 4rem);
         font-weight: 500;

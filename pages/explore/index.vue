@@ -40,7 +40,7 @@ definePageMeta({
     </section>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 #explore {
     margin: 0.75rem;
     width: calc(100% - 1.5rem);
