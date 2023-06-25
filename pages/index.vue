@@ -72,8 +72,9 @@ onMounted(() => {
 
 <template>
     <section id="hero-container">
+        <div class="hover-overlay"></div>
         <Transition name="image" mode="out-in">
-            <img :style="{filter: currentData.image_filters}" :key="currentData.id" class="background" :src="currentData.background" :alt="currentData.title">
+            <img :style="{filter: currentData.image_filters}" :key="currentData.id" class="background" :src="currentData.background" :alt="currentData.short_title">
         </Transition>
         <Transition name="primary" mode="out-in">
             <img v-if="currentData.title.type === 'image'" :key="(currentData.id || 0) + 1" class="primary-image" :src="currentData.title.data" :style="{width: currentData.title.width}" />
@@ -195,7 +196,7 @@ onMounted(() => {
         left: 0;
         top: 0;
         object-fit: cover;
-        z-index: -1;
+        z-index: -2;
         border-radius: inherit;
     }
     > .title {
@@ -207,6 +208,10 @@ onMounted(() => {
     .subtitle {
         font-weight: 100;
         margin-top: 2rem;
+    }
+    .content {
+        opacity: 0.5;
+        transition: all 0.3s;
     }
     .action {
         margin-top: 2rem;
@@ -221,6 +226,25 @@ onMounted(() => {
         color: white;
         background: none;
         outline: rgba(255, 255, 255, 0.5) 2px solid;
+    }
+    > .hover-overlay {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        object-fit: cover;
+        z-index: -1;
+        border-radius: inherit;
+        transition: all 0.3s;
+    }
+    &:hover {
+        .content {
+            opacity: 1;
+        }
+        > .hover-overlay {
+            backdrop-filter: brightness(0.5) blur(0.5rem);
+        }
     }
 }
 
