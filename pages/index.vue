@@ -40,9 +40,15 @@ const slides = [
             data: "S.T.A.L.K.E.R. 2: Heart Of Chernobyl",
             type: "text"
         },
-        subtitle: "",
-        content: "Шойгу, Герасимов! ГДЕ БЛЯТЬ БОЕПРИПАСЫ?!",
+        subtitle: "Слит билд",
+        content: "В сеть утек играбельный билд S.T.A.L.K.E.R. 2: Сердце Чернобыля. Новости о появлении билда в сети появились еще несколько дней назад, однако запустить и обойти систему защиты сборки удалось только сегодня.",
         short_title: "S.T.A.L.K.E.R. 2",
+        action: {
+            text: "Скачать",
+            onClick: () => {
+                console.log("Download")
+            }
+        }
     }
 ]
 const currentIndex = ref(0)
@@ -66,7 +72,10 @@ const setIndex = (index: number) => {
 setIndex(0)
 
 onMounted(() => {
-    setIndex(1)
+    setIndex(0)
+    setTimeout(() => {
+        setIndex(1)
+    }, 100);
 });
 </script>
 
@@ -204,14 +213,18 @@ onMounted(() => {
         max-width: calc(75% - 4rem);
         font-weight: 500;
         text-transform: uppercase;
+        transition: margin-left 0.3s;
     }
     .subtitle {
         font-weight: 100;
         margin-top: 2rem;
+        transition: margin-left 0.3s 0.1s;
     }
     .content {
         opacity: 0.5;
-        transition: all 0.3s;
+        transition: opacity 0.3s;
+        transition: margin-left 0.3s 0.2s;
+        max-width: 60%;
     }
     .action {
         margin-top: 2rem;
@@ -221,6 +234,7 @@ onMounted(() => {
         padding: 0.5rem 1rem;
         transition: all 0.3s;
         outline: rgba(255, 255, 255, 0) 2px solid;
+        transition: margin-left 0.3s 0.3s;
     }
     .action:hover {
         color: white;
@@ -241,9 +255,20 @@ onMounted(() => {
     &:hover {
         .content {
             opacity: 1;
+            margin-left: 1rem;
+        }
+        > .title {
+            margin-left: 1rem;
+        }
+        
+        .subtitle {
+            margin-left: 1rem;
+        }
+        .action {
+            margin-left: 1rem;
         }
         > .hover-overlay {
-            backdrop-filter: brightness(0.5) blur(0.5rem);
+            backdrop-filter: brightness(0.5);
         }
     }
 }
