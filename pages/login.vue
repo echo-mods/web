@@ -6,7 +6,10 @@ definePageMeta({
 
 const { locale } = useI18n()
 const { api_endpoint } = useAppConfig()
-const code = ref("")
+const input = reactive({
+    login: "",
+    password: ""
+})
 
 const submitted = ref(false)
 const toast = useToast()
@@ -20,8 +23,9 @@ const authenticate = async () => {
     submitted.value = true
     const { data, error } = await useFetch(`${api_endpoint}login`, {
         method: "POST",
-        query: {
-            code: code.value
+        body: {
+            login: input.login,
+            password: input.password
         }
     })
     if (error.value) {
@@ -39,7 +43,7 @@ defineShortcuts({
     enter: {
         usingInput: true,
         handler: () => {
-            if (code.value.length >= 6) { authenticate() }
+            if (input.password.length >= 8) { authenticate() }
         }
     }
 })
@@ -49,19 +53,14 @@ defineShortcuts({
     <div class="form">
         <h1>{{ $t('login_heading') }}</h1>
         <hr>
-        <h2>{{ $t("step_1") }}</h2>
-        <a href="tg://resolve?domain=echomods_bot">
-            <UButton color="white">
-                <Icon name="jam:telegram" />{{ $t("start_bot") }}
-            </UButton>
-        </a>
-        <hr>
-        <h2>{{ $t("step_2") }}</h2>
-        <UFormGroup :label="$t('code')" :error="$t(login_error)">
-            <UInput :disabled="submitted" type="number" icon="i-heroicons-key" v-model="code" />
+        <UFormGroup :label="$t('login_word')">
+            <UInput :disabled="submitted" type="email" icon="i-heroicons-user-circle" v-model="input.login" />
+        </UFormGroup>
+        <UFormGroup :label="$t('password_word')" :error="$t(login_error)">
+            <UInput :disabled="submitted" type="password" icon="i-heroicons-key" v-model="input.password" />
         </UFormGroup>
         <UButton color="white" :icon="submitted ? '' : `i-heroicons-arrow-right-on-rectangle`" @click="authenticate" :loading="submitted"
-            :disabled="code.length < 6" :label="submitted ? $t('logging_in') : $t('login')"></UButton>
+            :disabled="input.password.length < 8" :label="submitted ? $t('logging_in') : $t('login')"></UButton>
     </div>
 </template>
 

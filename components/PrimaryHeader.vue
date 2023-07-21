@@ -2,17 +2,26 @@
 const { locale } = useI18n()
 const route = useRoute()
 
+const useUser = useState("state", (): any => {
+    return {
+        name: {
+            first: "Andrei",
+            last: "Hudalla"
+        }
+    }
+})
+
 const links = [
     {
         text: "Home",
         ru_text: "Домашняя",
         route: "/"
     },
-    /*{
+    {
         text: "News",
         ru_text: "Новости",
         route: "/news"
-    },*/
+    },
     {
         text: "Roadmap",
         ru_text: "Планы",
@@ -85,7 +94,10 @@ const show_profile_dropdown = true
         <div class="right">
             <LangSwitcher />
             <UDropdown v-if="show_profile_dropdown" :items="profile_menu" :popper="{ placement: 'bottom-start' }">
-                <UAvatar class="profile-btn" alt="Benjamin Canac" />
+                <div class="profile-btn">
+                    <UAvatar v-if="useUser !== undefined && typeof useUser === 'object' && useUser['name']" :alt="`${useUser.name.first} ${useUser.name.last}`" />
+                    <UIcon v-else name="i-heroicons-user-20-solid"/>
+                </div>
             </UDropdown>
         </div>
     </header>
@@ -210,5 +222,11 @@ header {
 }
 
 .profile-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 2rem;
+    aspect-ratio: 1 !important;
+    border-radius: 5rem;
     border: 1px rgba(255, 255, 255, 0.3) solid;
 }</style>

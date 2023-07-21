@@ -17,7 +17,7 @@ const slides = [
         action: {
             text: "Скачать",
             onClick: () => {
-
+                alert("Блин, а как скачать-то")
             }
         },
         short_title: "Expedition",
@@ -49,7 +49,7 @@ const slides = [
                 console.log("Download")
             }
         }
-    }
+    },
 ]
 const currentIndex = ref(0)
 const currentData = computed(() => {
@@ -101,7 +101,7 @@ onMounted(() => {
             </div>
         </Transition>
         <div class="cards">
-            <div class="card" v-for="(data, index) in slides" @click="setIndex(index)" :style="{height: `calc(${100 / slides.length}% - ${slides.length}rem)`}">
+            <div class="card" v-for="(data, index) in slides" :tabindex="index" @click="setIndex(index)" :style="{height: `calc(${100 / slides.length}% - ${4 / slides.length}rem)`}">
                 <img class="background" :src="data.background" />
                 <div class="overlay" :class="{current: index === currentIndex}"></div>
                 <div class="data">
