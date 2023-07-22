@@ -92,6 +92,10 @@ const show_profile_dropdown = true
             </NuxtLink>
         </div>
         <div class="right">
+            <a target="_blank">
+                <UButton>{{ $t("call_to_download") }}</UButton>
+            </a>
+            <div class="divider"></div>
             <LangSwitcher />
             <UDropdown v-if="show_profile_dropdown" :items="profile_menu" :popper="{ placement: 'bottom-start' }">
                 <div class="profile-btn">
@@ -219,6 +223,11 @@ header {
     align-items: center;
     gap: 1rem;
     margin-left: auto;
+    .divider {
+        width: 1px;
+        height: 2rem;
+        background-color: rgba(255,255,255,0.5);
+    }
 }
 
 .profile-btn {

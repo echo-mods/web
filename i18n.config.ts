@@ -24,6 +24,8 @@ export default defineI18nConfig(() => ({
             login_word: "Логин",
             password_word: "Пароль",
             login_error: "Неверный логин или пароль",
+            news_title: "Новости",
+            call_to_download: "Скачать мод менеджер",
         },
         en: {
             "null": "",
@@ -48,6 +50,8 @@ export default defineI18nConfig(() => ({
             login_word: "Log in",
             password_word: "Password",
             login_error: "Invalid login or password",
+            news_title: "News",
+            call_to_download: "Download the manager",
         },
     },
 }));

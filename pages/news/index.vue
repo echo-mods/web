@@ -17,5 +17,11 @@ definePageMeta({
 </template>
 
 <style scoped lang="scss">
-
+#news {
+    padding: 1rem;
+    h1 {
+        font-size: 2rem;
+        font-weight: 700;
+    }
+}
 </style>
