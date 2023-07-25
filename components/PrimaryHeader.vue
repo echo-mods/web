@@ -92,7 +92,7 @@ const show_profile_dropdown = true
             </NuxtLink>
         </div>
         <div class="right">
-            <a target="_blank">
+            <a class="download_btn" target="_blank">
                 <UButton>{{ $t("call_to_download") }}</UButton>
             </a>
             <div class="divider"></div>
@@ -238,4 +238,16 @@ header {
     aspect-ratio: 1 !important;
     border-radius: 5rem;
     border: 1px rgba(255, 255, 255, 0.3) solid;
-}</style>
+}
+@media (max-width: 850px) {
+    .right > .divider, .download_btn {
+        display: none;
+    }
+}
+
+@media (max-width: 650px) {
+    .links {
+        display: none;
+    }
+}
+</style>

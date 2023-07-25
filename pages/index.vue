@@ -20,6 +20,10 @@ const slides = [
                 alert("Блин, а как скачать-то")
             }
         },
+        mobile_link: {
+            url: "/news/expedition-update-2023",
+            text: "Читать"
+        },
         short_title: "Expedition",
         id: 0
     },
@@ -33,6 +37,10 @@ const slides = [
         subtitle: "Новые скриншоты с разработки",
         content: "Опубликованы новые скриншоты разрабатываемого мода «Shadow Of Chernobyl Update».",
         short_title: "SOC Update",
+        mobile_link: {
+            url: "",
+            text: "Читать"
+        },
     },
     {
         background: "https://www.stalker2.com/_nuxt/img/assets/pages/game/the_danger/03.jpg",
@@ -48,9 +56,14 @@ const slides = [
             onClick: () => {
                 console.log("Download")
             }
+        },
+        mobile_link: {
+            url: "",
+            text: "Читать"
         }
     },
 ]
+
 const currentIndex = ref(0)
 const currentData = computed(() => {
     currentIndex.value = currentIndex.value % slides.length
@@ -83,13 +96,16 @@ onMounted(() => {
     <section id="hero-container">
         <div class="hover-overlay"></div>
         <Transition name="image" mode="out-in">
-            <img :style="{filter: currentData.image_filters}" :key="currentData.id" class="background" :src="currentData.background" :alt="currentData.short_title">
+            <img :style="{ filter: currentData.image_filters }" :key="currentData.id" class="background"
+                :src="currentData.background" :alt="currentData.short_title">
         </Transition>
         <Transition name="primary" mode="out-in">
-            <img v-if="currentData.title.type === 'image'" :key="(currentData.id || 0) + 1" class="primary-image" :src="currentData.title.data" :style="{width: currentData.title.width}" />
+            <img v-if="currentData.title.type === 'image'" :key="(currentData.id || 0) + 1" class="primary-image"
+                :src="currentData.title.data" />
         </Transition>
         <Transition name="primary" mode="out-in">
-            <h1 v-if="currentData.title.type === 'text'" :key="currentData.id" class="title">{{ currentData.title.data }}</h1>
+            <h1 v-if="currentData.title.type === 'text'" :key="currentData.id" class="title">{{ currentData.title.data }}
+            </h1>
         </Transition>
         <Transition name="secondary" mode="out-in">
             <div :key="currentData.id" class="secondary-content">
@@ -98,12 +114,18 @@ onMounted(() => {
                 <button v-if="currentData.action" class="action" @click="currentData.action.onClick">
                     {{ currentData.action.text }}
                 </button>
+                <NuxtLink v-if="currentData.mobile_link" :to="currentData.mobile_link.url">
+                    <button class="mobile-action">
+                        {{ currentData.mobile_link.text }}
+                    </button>
+                </NuxtLink>
             </div>
         </Transition>
         <div class="cards">
-            <div class="card" v-for="(data, index) in slides" :tabindex="index" @click="setIndex(index)" :style="{height: `calc(${100 / slides.length}% - ${4 / slides.length}rem)`}">
+            <div class="card" v-for="(data, index) in slides" :tabindex="index" @click="setIndex(index)"
+                :style="{ height: `calc(${100 / slides.length}% - ${4 / slides.length}rem)` }">
                 <img class="background" :src="data.background" />
-                <div class="overlay" :class="{current: index === currentIndex}"></div>
+                <div class="overlay" :class="{ current: index === currentIndex }"></div>
                 <div class="data">
                     <p class="title">{{ data.short_title }}</p>
                 </div>
@@ -134,6 +156,7 @@ onMounted(() => {
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
+
         .card {
             position: relative;
             user-select: none;
@@ -144,6 +167,7 @@ onMounted(() => {
             transition: all 0.3s;
             box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.8);
             overflow: hidden;
+
             .overlay {
                 position: absolute;
                 width: 0;
@@ -157,6 +181,7 @@ onMounted(() => {
                 transition-timing-function: linear;
                 opacity: 0;
             }
+
             .overlay.current {
                 width: 100%;
                 opacity: 1;
@@ -164,6 +189,7 @@ onMounted(() => {
                 transition-duration: 5s, 0.3s;
                 transition-timing-function: linear;
             }
+
             .background {
                 position: absolute;
                 width: 100%;
@@ -174,6 +200,7 @@ onMounted(() => {
                 border-radius: inherit;
                 filter: brightness(0.6);
             }
+
             .data {
                 position: absolute;
                 width: 100%;
@@ -184,6 +211,7 @@ onMounted(() => {
                 display: flex;
                 justify-content: center;
                 align-items: center;
+
                 .title {
                     font-size: 1rem;
                     width: 100%;
@@ -193,12 +221,13 @@ onMounted(() => {
                 }
             }
         }
+
         .card:hover {
             transform: scale(1.1);
         }
     }
 
-    > .background {
+    >.background {
         position: absolute;
         width: 100%;
         height: 100%;
@@ -208,24 +237,38 @@ onMounted(() => {
         z-index: -2;
         border-radius: inherit;
     }
-    > .title {
+
+    >.title {
         font-size: 2.5rem;
         max-width: calc(75% - 4rem);
         font-weight: 500;
         text-transform: uppercase;
         transition: margin-left 0.3s;
     }
+
     .subtitle {
         font-weight: 100;
         margin-top: 2rem;
         transition: margin-left 0.3s 0.1s;
     }
+
     .content {
         opacity: 0.5;
         transition: opacity 0.3s;
         transition: margin-left 0.3s 0.2s;
         max-width: 60%;
     }
+
+    .mobile-action {
+        display: none;
+        background-color: white;
+        color: black;
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        transition: all 0.3s;
+        outline: rgba(255, 255, 255, 0) 2px solid;
+    }
+
     .action {
         margin-top: 2rem;
         background-color: white;
@@ -236,12 +279,14 @@ onMounted(() => {
         outline: rgba(255, 255, 255, 0) 2px solid;
         transition: margin-left 0.3s 0.3s;
     }
+
     .action:hover {
         color: white;
         background: none;
         outline: rgba(255, 255, 255, 0.5) 2px solid;
     }
-    > .hover-overlay {
+
+    >.hover-overlay {
         position: absolute;
         width: 100%;
         height: 100%;
@@ -252,22 +297,26 @@ onMounted(() => {
         border-radius: inherit;
         transition: all 0.3s;
     }
+
     &:hover {
         .content {
             opacity: 1;
             margin-left: 1rem;
         }
-        > .title {
+
+        >.title {
             margin-left: 1rem;
         }
-        
+
         .subtitle {
             margin-left: 1rem;
         }
+
         .action {
             margin-left: 1rem;
         }
-        > .hover-overlay {
+
+        >.hover-overlay {
             backdrop-filter: brightness(0.5);
         }
     }
@@ -276,48 +325,110 @@ onMounted(() => {
 /* PRIMARY */
 .primary-enter-active,
 .primary-leave-active {
-  transition: all 0.3s 0.1s;
+    transition: all 0.3s 0.1s;
 }
 
 .primary-enter-from {
-  transform: translateX(150px);
-  opacity: 0;
+    transform: translateX(150px);
+    opacity: 0;
 }
 
 .primary-leave-to {
-  transform: translateX(-30px);
-  opacity: 0;
+    transform: translateX(-30px);
+    opacity: 0;
 }
 
 /* SECONDARY */
 .secondary-enter-active,
 .secondary-leave-active {
-  transition: all 0.2s 0.1s;
+    transition: all 0.2s 0.1s;
 }
 
 .secondary-enter-from {
-  transform: translateX(30px);
-  opacity: 0;
+    transform: translateX(30px);
+    opacity: 0;
 }
 
 .secondary-leave-to {
-  transform: translateX(-30px);
-  opacity: 0;
+    transform: translateX(-30px);
+    opacity: 0;
 }
 
 /* IMAGE */
 .image-enter-active,
 .image-leave-active {
-  transition: all 0.2s;
+    transition: all 0.2s;
 }
 
 .image-enter-from {
-  transform: translateX(30px);
-  opacity: 0;
+    transform: translateX(30px);
+    opacity: 0;
 }
 
 .image-leave-to {
-  transform: translateX(-30px);
-  opacity: 0;
+    transform: translateX(-30px);
+    opacity: 0;
+}
+
+@media (max-width: 750px) {
+    .cards {
+        display: none !important;
+    }
+
+    #hero-container {
+        height: auto;
+        min-height: calc(35vh);
+        padding: 1.5rem 3rem;
+        align-items: center;
+        >.title {
+            font-size: 1.5rem;
+            max-width: 100%;
+            text-align: center;
+        }
+
+        .subtitle {
+            font-weight: 100;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .secondary-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .content {
+            display: none;
+        }
+
+        .action {
+            display: none;
+        }
+
+        .mobile-action {
+            display: block;
+            margin-top: 1rem;
+        }
+
+        >.hover-overlay {
+            backdrop-filter: brightness(0.5);
+        }
+
+        &:hover {
+
+            >.title {
+                margin-left: 0;
+            }
+
+            .subtitle {
+                margin-left: 0;
+            }
+
+            .action {
+                margin-left: 0;
+            }
+        }
+    }
 }
 </style>

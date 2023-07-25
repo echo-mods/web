@@ -8,6 +8,9 @@ export default defineNuxtConfig({
         'nuxt-icon',
         '@nuxt/content',
     ],
+    routeRules: {
+      "/": {prerender: true}
+    },
     i18n: {
         strategy: "no_prefix",
         locales: ["ru", "en"], // used in URL path prefix
