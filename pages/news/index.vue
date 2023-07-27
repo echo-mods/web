@@ -31,18 +31,20 @@ const newsReactive = <newsContainer>reactive({
     other: []
 })
 
+const { locale } = useI18n()
+
 const getSpotlightNews = async () => {
     newsReactive.spotlight = []
     for (let i = 0; i < spotlight_news.length; i++) {
         if (Object.prototype.hasOwnProperty.call(spotlight_news, i)) {
             const path = spotlight_news[i];
-            const { data: content } = await useAsyncData(path, () => queryContent(`/news/${path}`).findOne())
+            const { data: content } = await useAsyncData(path, () => queryContent(`/news/${locale.value}/${path}`).findOne())
             if (content.value) {
                 const output = {
                     image: content.value["homepage_image"],
                     title: content.value["title"],
                     subtitle: content.value["homepage_subtitle"],
-                    article_url: `/news/${path}`,
+                    article_url: `/news/${locale.value}/${path}`,
                     id: i
                 }
                 if (newsReactive.spotlight.length < i + 1) {
@@ -58,13 +60,13 @@ const refreshNews = async () => {
     for (let i = (page.value - 1) * amountToDisplay; i < page.value * amountToDisplay && i < news.length; i++) {
         if (Object.prototype.hasOwnProperty.call(news, i)) {
             const path = news[i];
-            const { data: content } = await useAsyncData(path, () => queryContent(`/news/${path}`).findOne())
+            const { data: content } = await useAsyncData(path, () => queryContent(`/news/${locale.value}/${path}`).findOne())
             if (content.value) {
                 const output = {
                     image: content.value["homepage_image"],
                     title: content.value["title"],
                     subtitle: content.value["homepage_subtitle"],
-                    article_url: `/news/${path}`,
+                    article_url: `/news/${locale.value}/${locale.value}/${path}`,
                     id: i
                 }
                 if (newsReactive.other.length < i + 1) {
@@ -79,36 +81,44 @@ const refreshNews = async () => {
 onMounted(getSpotlightNews)
 watchEffect(refreshNews)
 getSpotlightNews()
+
+watchEffect(() => {
+    if (!locale.value) { return }
+    getSpotlightNews()
+    refreshNews()
+})
 </script>
 
 <template>
     <section id="news">
         <h1>{{ $t("news_title") }}</h1>
         <ClientOnly>
-            <div class="spotlight">
-                <div class="card" v-for="article in newsReactive.spotlight">
-                    <NuxtLink :to="article.article_url">
-                        <img :src="article.image" alt="Article image">
-                    </NuxtLink>
-                    <NuxtLink :to="article.article_url">
-                        <h3 class="title">{{ article.title }}</h3>
-                    </NuxtLink>
-                    <p class="subtitle">{{ article.subtitle }}</p>
+            <div class="news-container">
+                <div class="spotlight">
+                    <div class="card" v-for="article in newsReactive.spotlight">
+                        <NuxtLink :to="article.article_url">
+                            <img :src="article.image" alt="Article image">
+                        </NuxtLink>
+                        <NuxtLink :to="article.article_url">
+                            <h3 class="title">{{ article.title }}</h3>
+                        </NuxtLink>
+                        <p class="subtitle">{{ article.subtitle }}</p>
+                    </div>
                 </div>
-            </div>
-            <hr>
-            <div class="grid">
-                <div class="card small" v-for="article in newsReactive.other">
-                    <NuxtLink :to="article.article_url">
-                        <img :src="article.image" alt="Article image">
-                    </NuxtLink>
-                    <NuxtLink :to="article.article_url">
-                        <h3 class="title">{{ article.title }}</h3>
-                    </NuxtLink>
-                    <p class="subtitle">{{ article.subtitle }}</p>
+                <hr>
+                <div class="grid">
+                    <div class="card small" v-for="article in newsReactive.other">
+                        <NuxtLink :to="article.article_url">
+                            <img :src="article.image" alt="Article image">
+                        </NuxtLink>
+                        <NuxtLink :to="article.article_url">
+                            <h3 class="title">{{ article.title }}</h3>
+                        </NuxtLink>
+                        <p class="subtitle">{{ article.subtitle }}</p>
+                    </div>
                 </div>
+                <UPagination v-model="page" :page-count="amountToDisplay" :total="news.length" />
             </div>
-            <UPagination v-model="page" :page-count="amountToDisplay" :total="news.length"></UPagination>
             <template #fallback>
                 <div class="spotlight">
                     <div class="card">
@@ -170,8 +180,15 @@ getSpotlightNews()
 }
 
 hr {
-    margin: 2rem 1rem;
+    margin: 2rem 0;
     opacity: 0.2;
+    width: 100%;
+}
+
+.news-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .card {
@@ -204,6 +221,16 @@ hr {
     }
     &.small {
         width: calc((100% - 2rem) / 3);
+        .title {
+            font-weight: 700;
+            font-size: 0.9rem;
+            max-width: 100%;
+        }
+        > .subtitle {
+            font-weight: 300;
+            font-size: 0.7rem;
+            max-width: 100%;
+        }
     }
 }
 </style>

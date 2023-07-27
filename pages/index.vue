@@ -23,10 +23,12 @@ interface article {
 
 const slidesReactive: Ref<article[]> = ref([])
 
+const { locale } = useI18n()
+
 for (const i in slidesList) {
     if (Object.prototype.hasOwnProperty.call(slidesList, i)) {
         const path = slidesList[i];
-        const { data: content } = await useAsyncData(path, () => queryContent(`/news/${path}`).findOne())
+        const { data: content } = await useAsyncData(path, () => queryContent(`/news/${locale.value}/${path}`).findOne())
         if (content.value) {
             slidesReactive.value.push({
                 background: content.value["homepage_image"],
@@ -38,7 +40,7 @@ for (const i in slidesList) {
                 content: content.value["description"],
                 image_filters: content.value["homepage_iamge_filters"],
                 short_title: content.value["topic"],
-                article_url: `/news/${path}`,
+                article_url: `/news/${locale.value}/${path}`,
                 id: parseInt(i)
             })
         }

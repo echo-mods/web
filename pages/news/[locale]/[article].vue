@@ -2,6 +2,18 @@
 definePageMeta({
     middleware: "news"
 })
+
+const articleTitle = useState("newsArticleTitle")
+const { fullPath } = useRoute()
+const { data } = await useAsyncData(fullPath, () => queryContent(fullPath).findOne())
+onMounted(() => {
+    if (data.value) {
+        articleTitle.value = data.value.title
+    }
+})
+onUnmounted(() => {
+    articleTitle.value = undefined
+})
 </script>
 
 <template>
