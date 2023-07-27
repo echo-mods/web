@@ -26,6 +26,7 @@ export default defineI18nConfig(() => ({
             login_error: "Неверный логин или пароль",
             news_title: "Новости",
             call_to_download: "Скачать мод менеджер",
+            read_more: "Читать болье",
         },
         en: {
             "null": "",
@@ -52,6 +53,7 @@ export default defineI18nConfig(() => ({
             login_error: "Invalid login or password",
             news_title: "News",
             call_to_download: "Download the manager",
+            read_more: "Read more",
         },
     },
 }));

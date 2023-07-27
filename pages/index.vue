@@ -4,70 +4,51 @@ definePageMeta({
     ru_name: 'Домашняя'
 })
 
-const slides = [
-    {
-        background: "https://preview.redd.it/installed-expedition-anomaly-and-well-it-is-amazing-v0-txsos1h9led81.jpg?auto=webp&s=0139efedf5608924d8e03210fcab85ad979daf39",
-        title: {
-            data: "Expedition 2.3",
-            type: "text"
-        },
-        subtitle: "Вышло обновление",
-        content: "",
-        image_filters: "brightness(0.4)",
-        action: {
-            text: "Скачать",
-            onClick: () => {
-                alert("Блин, а как скачать-то")
-            }
-        },
-        mobile_link: {
-            url: "/news/expedition-update-2023",
-            text: "Читать"
-        },
-        short_title: "Expedition",
-        id: 0
+
+const { frontpage_news: slidesList } = useAppConfig()
+
+interface article {
+    background: string,
+    title: {
+        data: string | undefined,
+        type: string
     },
-    {
-        background: "https://i.ibb.co/Y7wHBnY/ASb-TBAb-VJss.jpg",
-        title: {
-            data: "Shadow Of Chernobyl Update",
-            type: "text"
-        },
-        image_filters: "brightness(0.4)",
-        subtitle: "Новые скриншоты с разработки",
-        content: "Опубликованы новые скриншоты разрабатываемого мода «Shadow Of Chernobyl Update».",
-        short_title: "SOC Update",
-        mobile_link: {
-            url: "",
-            text: "Читать"
-        },
-    },
-    {
-        background: "https://www.stalker2.com/_nuxt/img/assets/pages/game/the_danger/03.jpg",
-        title: {
-            data: "S.T.A.L.K.E.R. 2: Heart Of Chernobyl",
-            type: "text"
-        },
-        subtitle: "Слит билд",
-        content: "В сеть утек играбельный билд S.T.A.L.K.E.R. 2: Сердце Чернобыля. Новости о появлении билда в сети появились еще несколько дней назад, однако запустить и обойти систему защиты сборки удалось только сегодня.",
-        short_title: "S.T.A.L.K.E.R. 2",
-        action: {
-            text: "Скачать",
-            onClick: () => {
-                console.log("Download")
-            }
-        },
-        mobile_link: {
-            url: "",
-            text: "Читать"
+    subtitle: string,
+    content: string,
+    image_filters: string,
+    short_title: string,
+    article_url: string,
+    id: number
+}
+
+const slidesReactive: Ref<article[]> = ref([])
+
+for (const i in slidesList) {
+    if (Object.prototype.hasOwnProperty.call(slidesList, i)) {
+        const path = slidesList[i];
+        const { data: content } = await useAsyncData(path, () => queryContent(`/news/${path}`).findOne())
+        if (content.value) {
+            slidesReactive.value.push({
+                background: content.value["homepage_image"],
+                title: {
+                    data: content.value["title"],
+                    type: content.value["title_image"] ? "image" : "text"
+                },
+                subtitle: content.value["homepage_subtitle"],
+                content: content.value["description"],
+                image_filters: content.value["homepage_iamge_filters"],
+                short_title: content.value["topic"],
+                article_url: `/news/${path}`,
+                id: parseInt(i)
+            })
         }
-    },
-]
+    }
+}
 
 const currentIndex = ref(0)
 const currentData = computed(() => {
-    currentIndex.value = currentIndex.value % slides.length
-    const gotObject = slides[currentIndex.value]
+    currentIndex.value = currentIndex.value % slidesReactive.value.length
+    const gotObject = slidesReactive.value[currentIndex.value]
     gotObject.id = currentIndex.value
     return gotObject
 })
@@ -111,19 +92,14 @@ onMounted(() => {
             <div :key="currentData.id" class="secondary-content">
                 <h2 class="subtitle">{{ currentData.subtitle }}</h2>
                 <p class="content">{{ currentData.content }}</p>
-                <button v-if="currentData.action" class="action" @click="currentData.action.onClick">
-                    {{ currentData.action.text }}
-                </button>
-                <NuxtLink v-if="currentData.mobile_link" :to="currentData.mobile_link.url">
-                    <button class="mobile-action">
-                        {{ currentData.mobile_link.text }}
-                    </button>
+                <NuxtLink v-if="currentData.article_url" :to="currentData.article_url">
+                    <UButton icon="i-heroicons-book-open" :label="$t('read_more')" variant="link" class="action"/>
                 </NuxtLink>
             </div>
         </Transition>
-        <div class="cards">
-            <div class="card" v-for="(data, index) in slides" :tabindex="index" @click="setIndex(index)"
-                :style="{ height: `calc(${100 / slides.length}% - ${4 / slides.length}rem)` }">
+        <div class="cards" v-if="slidesReactive.length > 1">
+            <div class="card" v-for="(data, index) in slidesReactive" :tabindex="index" @click="setIndex(index)"
+                :style="{ height: `calc(${100 / slidesReactive.length}% - ${4 / slidesReactive.length}rem)` }">
                 <img class="background" :src="data.background" />
                 <div class="overlay" :class="{ current: index === currentIndex }"></div>
                 <div class="data">
@@ -248,7 +224,7 @@ onMounted(() => {
 
     .subtitle {
         font-weight: 100;
-        margin-top: 2rem;
+        margin: 1rem 0;
         transition: margin-left 0.3s 0.1s;
     }
 
@@ -259,31 +235,10 @@ onMounted(() => {
         max-width: 60%;
     }
 
-    .mobile-action {
-        display: none;
-        background-color: white;
-        color: black;
-        border-radius: 8px;
-        padding: 0.5rem 1rem;
-        transition: all 0.3s;
-        outline: rgba(255, 255, 255, 0) 2px solid;
-    }
-
     .action {
-        margin-top: 2rem;
-        background-color: white;
-        color: black;
-        border-radius: 8px;
-        padding: 0.5rem 1rem;
+        margin-top: 1rem;
         transition: all 0.3s;
-        outline: rgba(255, 255, 255, 0) 2px solid;
         transition: margin-left 0.3s 0.3s;
-    }
-
-    .action:hover {
-        color: white;
-        background: none;
-        outline: rgba(255, 255, 255, 0.5) 2px solid;
     }
 
     >.hover-overlay {
@@ -380,6 +335,7 @@ onMounted(() => {
         min-height: calc(35vh);
         padding: 1.5rem 3rem;
         align-items: center;
+
         >.title {
             font-size: 1.5rem;
             max-width: 100%;
@@ -400,15 +356,6 @@ onMounted(() => {
 
         .content {
             display: none;
-        }
-
-        .action {
-            display: none;
-        }
-
-        .mobile-action {
-            display: block;
-            margin-top: 1rem;
         }
 
         >.hover-overlay {

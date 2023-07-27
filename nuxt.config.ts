@@ -9,7 +9,7 @@ export default defineNuxtConfig({
         '@nuxt/content',
     ],
     routeRules: {
-      "/": {prerender: true}
+      "/": {prerender: true},
     },
     i18n: {
         strategy: "no_prefix",
@@ -21,5 +21,8 @@ export default defineNuxtConfig({
     },
     colorMode: {
       preference: 'dark'
+    },
+    experimental: {
+      componentIslands: true
     }
 });
