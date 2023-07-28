@@ -34,7 +34,7 @@ const newsReactive = <newsContainer>reactive({
 const { locale } = useI18n()
 
 const getSpotlightNews = async () => {
-    newsReactive.spotlight = []
+    let result: newsElement[] = []
     for (let i = 0; i < spotlight_news.length; i++) {
         if (Object.prototype.hasOwnProperty.call(spotlight_news, i)) {
             const path = spotlight_news[i];
@@ -43,20 +43,19 @@ const getSpotlightNews = async () => {
                 const output = {
                     image: content.value["homepage_image"],
                     title: content.value["title"],
-                    subtitle: content.value["homepage_subtitle"],
+                    subtitle: content.value["description"],
                     article_url: `/news/${locale.value}/${path}`,
                     id: i
                 }
-                if (newsReactive.spotlight.length < i + 1) {
-                    newsReactive.spotlight.push(output)
-                }
+                result.push(output)
             }
         }
     }
+    newsReactive.spotlight = result
 }
 
 const refreshNews = async () => {
-    newsReactive.other = []
+    let result: newsElement[] = []
     for (let i = (page.value - 1) * amountToDisplay; i < page.value * amountToDisplay && i < news.length; i++) {
         if (Object.prototype.hasOwnProperty.call(news, i)) {
             const path = news[i];
@@ -66,15 +65,14 @@ const refreshNews = async () => {
                     image: content.value["homepage_image"],
                     title: content.value["title"],
                     subtitle: content.value["homepage_subtitle"],
-                    article_url: `/news/${locale.value}/${locale.value}/${path}`,
+                    article_url: `/news/${locale.value}/${path}`,
                     id: i
                 }
-                if (newsReactive.other.length < i + 1) {
-                    newsReactive.other.push(output)
-                }
+                result.push(output)
             }
         }
     }
+    newsReactive.other = result
 }
 
 // Get data
@@ -169,6 +167,7 @@ watchEffect(() => {
 .spotlight {
     display: flex;
     gap: 1rem;
+    flex-wrap: wrap;
 }
 
 .grid {
@@ -210,6 +209,9 @@ hr {
         font-weight: 300;
         font-size: 0.9rem;
         max-width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
     .skeleton-title {
         width: 50%;
@@ -220,6 +222,7 @@ hr {
         height: 1rem;
     }
     &.small {
+        filter: saturate(0);
         width: calc((100% - 2rem) / 3);
         .title {
             font-weight: 700;
@@ -231,6 +234,12 @@ hr {
             font-size: 0.7rem;
             max-width: 100%;
         }
+    }
+}
+
+@media (max-width: 700px) {
+    .card {
+        width: 100% !important;
     }
 }
 </style>

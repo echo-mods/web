@@ -24,5 +24,10 @@ export default defineNuxtConfig({
     },
     experimental: {
       componentIslands: true
+    },
+    vue: {  
+      compilerOptions: {
+        isCustomElement: (tag) => ['carousel'].includes(tag),
+      },
     }
 });

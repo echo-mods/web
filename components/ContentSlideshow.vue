@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { clear, time } from 'console';
 
 const slideID = ref(0)
 

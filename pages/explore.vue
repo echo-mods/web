@@ -204,6 +204,7 @@ definePageMeta({
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+  filter: blur(0.4rem);
 }
 
 .fade-leave-active {

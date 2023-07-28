@@ -25,31 +25,37 @@ const slidesReactive: Ref<article[]> = ref([])
 
 const { locale } = useI18n()
 
-for (const i in slidesList) {
-    if (Object.prototype.hasOwnProperty.call(slidesList, i)) {
-        const path = slidesList[i];
-        const { data: content } = await useAsyncData(path, () => queryContent(`/news/${locale.value}/${path}`).findOne())
-        if (content.value) {
-            slidesReactive.value.push({
-                background: content.value["homepage_image"],
-                title: {
-                    data: content.value["title"],
-                    type: content.value["title_image"] ? "image" : "text"
-                },
-                subtitle: content.value["homepage_subtitle"],
-                content: content.value["description"],
-                image_filters: content.value["homepage_iamge_filters"],
-                short_title: content.value["topic"],
-                article_url: `/news/${locale.value}/${path}`,
-                id: parseInt(i)
-            })
+const refreshSlides = async () => {
+    let result: article[] = []
+    for (const i in slidesList) {
+        if (Object.prototype.hasOwnProperty.call(slidesList, i)) {
+            const path = slidesList[i];
+            const { data: content } = await useAsyncData(path, () => queryContent(`/news/${locale.value}/${path}`).findOne())
+            if (content.value) {
+                result.push({
+                    background: content.value["homepage_image"],
+                    title: {
+                        data: content.value["title"],
+                        type: content.value["title_image"] ? "image" : "text"
+                    },
+                    subtitle: content.value["homepage_subtitle"],
+                    content: content.value["description"],
+                    image_filters: content.value["homepage_iamge_filters"],
+                    short_title: content.value["topic"],
+                    article_url: `/news/${locale.value}/${path}`,
+                    id: parseInt(i)
+                })
+            }
         }
     }
+    slidesReactive.value = result
 }
+
+await refreshSlides()
 
 const currentIndex = ref(0)
 const currentData = computed(() => {
-    currentIndex.value = currentIndex.value % slidesReactive.value.length
+    currentIndex.value = currentIndex.value % slidesList.length
     const gotObject = slidesReactive.value[currentIndex.value]
     gotObject.id = currentIndex.value
     return gotObject
@@ -69,10 +75,14 @@ setIndex(0)
 
 onMounted(() => {
     setIndex(0)
-    setTimeout(() => {
-        setIndex(1)
-    }, 100);
+    if (slidesList.length > 1) {
+        setTimeout(() => {
+            setIndex(1)
+        }, 100);
+    }
 });
+
+watch(locale, refreshSlides)
 </script>
 
 <template>
