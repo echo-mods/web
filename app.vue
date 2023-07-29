@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { title } from 'process';
+import '@/assets/css/tailwind.css'
 
 const { locale } = useI18n()
 const route = useRoute()

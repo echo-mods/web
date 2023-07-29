@@ -1,32 +1,28 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+    css: ["~/assets/css/tailwind.css"],
     devtools: { enabled: true },
-    modules: [
-        "@nuxtjs/i18n",
-        '@nuxthq/ui',
-        'nuxt-icon',
-        '@nuxt/content',
-    ],
+    modules: ["@nuxtjs/i18n", "@nuxthq/ui", "nuxt-icon", "@nuxt/content"],
     routeRules: {
-      "/": {prerender: true},
+        "/": { prerender: true },
     },
     i18n: {
         strategy: "no_prefix",
         locales: ["ru", "en"], // used in URL path prefix
         defaultLocale: "ru", // default locale of your project for Nuxt pages and routings
         detectBrowserLanguage: {
-          useCookie: true,
-        }
+            useCookie: true,
+        },
     },
     colorMode: {
-      preference: 'dark'
+        preference: "dark",
     },
     experimental: {
-      componentIslands: true
+        componentIslands: true,
     },
-    vue: {  
-      compilerOptions: {
-        isCustomElement: (tag) => ['carousel'].includes(tag),
-      },
-    }
+    vue: {
+        compilerOptions: {
+            isCustomElement: (tag) => ["carousel"].includes(tag),
+        },
+    },
 });
