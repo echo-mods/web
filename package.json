@@ -23,9 +23,5 @@
   },
   "dependencies": {
     "nuxt-appwrite": "^1.0.4"
-  },
-  "workspaces": [
-    "apps/**",
-    "packages/*"
-  ]
+  }
 }

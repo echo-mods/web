@@ -136,6 +136,7 @@ header {
         transition: all 0.3s ease-in-out;
         cursor: pointer;
         z-index: 2;
+        width: 100%;
     }
 
     .primary:hover {
@@ -151,6 +152,7 @@ header {
         opacity: 0;
         aspect-ratio: 1;
         pointer-events: none;
+        width: 100%;
     }
 
     .home:has(.primary:hover) .shadow:nth-child(2) {
