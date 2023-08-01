@@ -6,7 +6,9 @@ definePageMeta({
 </script>
 
 <template>
-    
+    <div id="roadmap">
+        
+    </div>
 </template>
 
 <style scoped lang="scss">
