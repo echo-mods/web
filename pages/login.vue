@@ -59,8 +59,19 @@ defineShortcuts({
         <UFormGroup :label="$t('password_word')" :error="$t(login_error)">
             <UInput :disabled="submitted" type="password" icon="i-heroicons-key" v-model="input.password" />
         </UFormGroup>
-        <UButton color="white" :icon="submitted ? '' : `i-heroicons-arrow-right-on-rectangle`" @click="authenticate" :loading="submitted"
-            :disabled="input.password.length < 8" :label="submitted ? $t('logging_in') : $t('login')"></UButton>
+        <UButton color="white" :icon="submitted ? '' : `i-heroicons-arrow-right-on-rectangle`" @click="authenticate"
+            :loading="submitted" :disabled="input.password.length < 8" :label="submitted ? $t('logging_in') : $t('login')">
+        </UButton>
+        <div class="switch-auth-mode">
+            <p>
+                {{ $t("switch_auth_mod_l") }}
+            </p>
+            <NuxtLink href="/signup">
+                <UButton size="xs" variant="soft">
+                    {{ $t("signup") }}
+                </UButton>
+            </NuxtLink>
+        </div>
     </div>
 </template>
 
@@ -91,6 +102,17 @@ defineShortcuts({
     hr {
         width: 100%;
         opacity: 0.3;
+    }
+
+    p {
+        user-select: none;
+        font-size: 0.8rem;
+    }
+    .switch-auth-mode {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
     }
 }
 

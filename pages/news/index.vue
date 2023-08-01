@@ -196,6 +196,7 @@ hr {
     gap: 0.5rem;
     width: calc((100% - 1rem) / 2);
     img, .skeleton-image {
+        transition: filter 0.2s;
         width: 100%;
         aspect-ratio: 16 / 9 !important;
         border-radius: 0.5rem;
@@ -212,6 +213,8 @@ hr {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+        opacity: 0.7;
+        transition: opacity 0.2s;;
     }
     .skeleton-title {
         width: 50%;
@@ -233,6 +236,14 @@ hr {
             font-weight: 300;
             font-size: 0.7rem;
             max-width: 100%;
+        }
+    }
+    &:hover {
+        img {
+            filter: brightness(1.25);
+        }
+        > .subtitle {
+            opacity: 1;
         }
     }
 }
