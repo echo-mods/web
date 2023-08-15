@@ -17,7 +17,9 @@ const { data } = await useFetch(`${api_endpoint}dashboard`, {
         session: SessionCookie.value
     }
 })
-const { mods } = data.value
+
+//const { mods } = data.value
+const mods: any = []
 </script>
 
 <template>
