@@ -74,6 +74,17 @@ watchEffect(() => {
 })
 // !!!
 const show_profile_dropdown = true
+
+
+const animating = useState("translation-animating")
+
+watchEffect(() => {
+    if (animating.value === true) {
+        setTimeout(() => {
+            animating.value = false
+        }, 1000);
+    }
+})
 </script>
 
 <template>
@@ -105,9 +116,26 @@ const show_profile_dropdown = true
             </UDropdown>
         </div>
     </header>
+    <div v-if="!(route.path.startsWith('/news/ru') || route.path.startsWith('/news/en'))" class="translation-effect" :class="{ slide: animating }"></div>
 </template>
 
 <style scoped lang="scss">
+.translation-effect {
+    position: absolute;
+    left: -100%;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(15,15,15,0.5);
+    backdrop-filter: blur(2rem);
+    transition: none;
+
+    &.slide {
+        left: 100%;
+        transition: all 1s ease-in-out;
+    }
+}
+
 header {
     height: 4rem;
     margin: 0.75rem;
@@ -119,6 +147,7 @@ header {
     padding: 0 1rem;
     display: flex;
     align-items: center;
+
     .home {
         position: relative;
         width: 2.8rem;
