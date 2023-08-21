@@ -66,13 +66,30 @@ h1,h2,h3,h4,h5,h6,p,span,img,button {
 }
 
 .page-enter-active,
-.page-leave-active {
-  transition: all 0.4s;
+.page-leave-active,
+.page-left-enter-active,
+.page-left-leave-active,
+.page-right-enter-active,
+.page-right-leave-active {
+  transition: all 0.3s ease-in-out;
 }
+
 .page-enter-from,
 .page-leave-to {
   opacity: 0;
-  transition: translateX(5rem);
+  filter: brightness(0.5) contrast(0.5);
+}
+
+.page-left-enter-from,
+.page-right-leave-to {
+  opacity: 0;
+  transform: translateX(-10%);
+}
+
+.page-right-enter-from,
+.page-left-leave-to {
+  opacity: 0;
+  transform: translateX(10%);
 }
 
 #file_upload {

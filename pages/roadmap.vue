@@ -1,7 +1,8 @@
 <script setup lang="ts">
 definePageMeta({
     name: "Roadmap",
-    ru_name: "Планы"
+    ru_name: "Планы",
+    horizonal_id: 3
 })
 </script>
 
@@ -12,5 +13,7 @@ definePageMeta({
 </template>
 
 <style scoped lang="scss">
-
+.roadmap {
+    display: flex;
+}
 </style>

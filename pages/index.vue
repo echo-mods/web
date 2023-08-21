@@ -1,7 +1,8 @@
 <script setup lang="ts">
 definePageMeta({
     name: 'Home',
-    ru_name: 'Домашняя'
+    ru_name: 'Домашняя',
+    horizonal_id: 1
 })
 
 

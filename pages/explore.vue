@@ -36,17 +36,18 @@ setTimeout(() => {
             "game_required": "soc"
         }
     ]
-}, 1000);
+}, 100);
 
 definePageMeta({
     name: 'Explore',
-    ru_name: 'Моды'
+    ru_name: 'Моды',
+    horizonal_id: 4
 })
 </script>
 
 <template>
-    <!-- Page containing mods -->
-    <TransitionGroup name="fade" mode="in-out">
+    <section id="explore">
+        <!-- Page containing mods -->
         <div v-if="pending" class="placeholder-container">
             <div class="card-placeholder">
                 <USkeleton class="w-[100%] h-4" />
@@ -64,32 +65,30 @@ definePageMeta({
                 <USkeleton class="w-[50%] h-7" />
             </div>
         </div>
-        <section id="explore" v-else>
-            <NuxtLink class="card" tag="div" v-for="(data, index) in cards" :to="`/mods/${data['id']}`">
-                <img v-once :src="data['imageURL']" class="background">
-                <div class="info-container">
-                    <span v-once>
-                        <Icon
-                            name="streamline:interface-favorite-star-reward-rating-rate-social-star-media-favorite-like-stars" />
-                        {{ data["rating"] }} / 10
-                    </span>
-                    <UPopover mode="hover" :popper="{ 'strategy': 'absolute' }">
-                        <h2>{{ data["description"] }}</h2>
-                        <template #panel>
-                            <p v-once style="margin: 1rem; text-align: center;">{{ data["description"] }}</p>
-                        </template>
-                    </UPopover>
-                </div>
-                <h1>{{ data["name"] }}</h1>
-            </NuxtLink>
-            <ClientOnly>
-                <div class="done">
-                    <img v-if="locale === 'ru'" src="/done.png">
-                    <h1>{{ $t("done") }}</h1>
-                </div>
-            </ClientOnly>
-        </section>
-    </TransitionGroup>
+        <NuxtLink v-if="!pending" class="card" tag="div" v-for="(data, index) in cards" :to="`/mods/${data['id']}`">
+            <img v-once :src="data['imageURL']" class="background">
+            <div class="info-container">
+                <span v-once>
+                    <Icon
+                        name="streamline:interface-favorite-star-reward-rating-rate-social-star-media-favorite-like-stars" />
+                    {{ data["rating"] }} / 10
+                </span>
+                <UPopover mode="hover" :popper="{ 'strategy': 'absolute' }">
+                    <h2>{{ data["description"] }}</h2>
+                    <template #panel>
+                        <p v-once style="margin: 1rem; text-align: center;">{{ data["description"] }}</p>
+                    </template>
+                </UPopover>
+            </div>
+            <h1>{{ data["name"] }}</h1>
+        </NuxtLink>
+        <ClientOnly>
+            <div class="done">
+                <img v-if="locale === 'ru'" src="/done.png">
+                <h1>{{ $t("done") }}</h1>
+            </div>
+        </ClientOnly>
+    </section>
 </template>
 
 <style scoped lang="scss">
@@ -103,7 +102,6 @@ definePageMeta({
 }
 
 .placeholder-container {
-    margin: 1.5rem 0.75rem;
     width: calc(100% - 1.5rem);
     display: flex;
     flex-wrap: wrap;
@@ -195,23 +193,25 @@ definePageMeta({
     }
 }
 
-.fade-move, /* apply transition to moving elements */
+.fade-move,
+/* apply transition to moving elements */
 .fade-enter-active,
 .fade-leave-active {
-  transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
 
 .fade-enter-from,
 .fade-leave-to {
-  opacity: 0;
-  filter: blur(0.4rem);
+    opacity: 0;
+    filter: blur(0.4rem);
 }
 
 .fade-leave-active {
-  position: absolute;
+    position: absolute;
 }
 
 @media (max-width: 600px) {
+
     .card,
     .card-placeholder {
         width: calc(100%);

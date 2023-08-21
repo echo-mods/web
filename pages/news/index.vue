@@ -1,7 +1,8 @@
 <script setup lang="ts">
 definePageMeta({
     name: "News",
-    ru_name: "Новости"
+    ru_name: "Новости",
+    horizonal_id: 2
 })
 
 const { news, spotlight_news } = useAppConfig()

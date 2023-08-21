@@ -6,6 +6,9 @@ export default defineNuxtConfig({
     routeRules: {
         "/": { prerender: true },
     },
+    app: {
+        pageTransition: { name: 'page', mode: 'out-in' }
+    },
     i18n: {
         strategy: "no_prefix",
         locales: ["ru", "en"], // used in URL path prefix
