@@ -25,7 +25,7 @@ export default defineI18nConfig(() => ({
             login_error: "Неверный логин или пароль",
             news_title: "Новости",
             call_to_download: "Скачать мод менеджер",
-            read_more: "Читать болье",
+            read_more: "Читать больше",
             signingup: "Создаём аккаунт",
             signup: "Создать аккаунт",
             first_name_word: "Имя",
