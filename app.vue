@@ -37,6 +37,10 @@ html::-webkit-scrollbar {
     display: none;
 }
 
+html {
+    overflow-x: hidden;
+}
+
 body {
     margin: 0;
     background-color: rgb(10,10,10);;

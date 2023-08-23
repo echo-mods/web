@@ -12,7 +12,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="container" ref="container" :style="{ opacity: (yPos + yHeight / 2 - scroll - 380) < 0 ? 1 : 0 }">
+    <div class="container" ref="container" :style="{ opacity: 1 - (yPos + yHeight / 2 - scroll - 380) / 50 }">
         <div class="dot">
             <div class="connector" :style="{ translate: index % 2 === 0 ? `` : `-100%` }"></div>
         </div>
@@ -32,8 +32,6 @@ onMounted(() => {
     display: flex;
     position: relative;
     justify-content: center;
-    transition: all 0.3s;
-
     .dot {
         position: absolute;
         background-color: rgb(var(--color-primary-500));
@@ -80,6 +78,20 @@ onMounted(() => {
                 font-size: 0.75rem;
             }
         }
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .dot {
+        left: calc(20vw + 0.2rem) !important;
+    }
+    .connector {
+        translate: 0 0 !important;
+    }
+    .info {
+        position: absolute;
+        left: 20vw;
+        translate: 4rem -50% !important;
     }
 }
 </style>

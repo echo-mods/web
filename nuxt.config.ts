@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
     css: ["~/assets/css/tailwind.css"],
     devtools: { enabled: true },
-    modules: ["@nuxtjs/i18n", "@nuxthq/ui", "nuxt-icon", "@nuxt/content"],
+    modules: [ '@nuxtjs/robots', "@nuxtjs/i18n", "@nuxthq/ui", "nuxt-icon", "@nuxt/content", 'nuxt-gtag' ],
     routeRules: {
         "/": { prerender: true },
     },
@@ -16,6 +16,9 @@ export default defineNuxtConfig({
         detectBrowserLanguage: {
             useCookie: true,
         },
+    },
+    gtag: {
+      id: 'G-ZZRS317TRT'
     },
     colorMode: {
         preference: "dark",
