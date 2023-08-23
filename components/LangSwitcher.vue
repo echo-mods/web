@@ -3,90 +3,52 @@ const { locale, setLocale } = useI18n()
 
 const route = useRoute()
 
-const lang_dropdown = ref([
-    [{
-        label: 'English',
-        click: () => { },
-        disabled: true
-    }, {
-        label: 'Русский',
-        click: () => { },
-        disabled: true
-    }]
-])
+const isRussian = ref(locale.value === "ru")
 
 const animating: Ref<boolean> = useState("translation-animating")
 
-watchEffect(() => {
-    if (locale.value === "en") {
-        lang_dropdown.value = [
-            [{
-                label: 'Русский',
-                click: () => {
-                    if (!(route.path.startsWith('/news/ru') || route.path.startsWith('/news/en'))) {
-                        animating.value = true
-                        setTimeout(() => {
-                            setLocale("ru")
-                        }, 500);
-                    } else {
-                        setLocale("ru")
-                    }
-                },
-                disabled: false
-            }]
-        ]
+const animateLocale = (locale: "en" | "ru") => {
+    if (!(route.path.startsWith(`/news/${locale}`) || route.path.startsWith(`/news/${locale}`))) {
+        animating.value = true
+        setTimeout(() => {
+            setLocale(locale)
+        }, 500);
     } else {
-        lang_dropdown.value = [
-            [{
-                label: 'English',
-                click: () => {
-                    if (!(route.path.startsWith('/news/ru') || route.path.startsWith('/news/en'))) {
-                        animating.value = true
-                        setTimeout(() => {
-                            setLocale("en")
-                        }, 500);
-                    } else {
-                        setLocale("en")
-                    }
-                },
-                disabled: false
-            }]
-        ]
+        setLocale(locale)
     }
-})
+}
+
+const update = () => {
+    setTimeout(() => {
+        if (isRussian.value) {
+            animateLocale("ru")
+        } else {
+            animateLocale("en")
+        }
+    }, 10);
+}
 
 </script>
 
 <template>
     <ClientOnly>
-        <UDropdown :items="lang_dropdown" :popper="{ placement: 'bottom-start', strategy: 'absolute' }" :disabled="animating">
-            <UButton class="selector-button" color="white" :label="locale === 'en' ? 'English' : 'Русский'" :disabled="animating">
-                <template #leading>
-                    <Icon name="emojione:flag-for-russia" v-if="locale === 'ru'" />
-                    <Icon name="emojione:flag-for-united-states" v-else-if="locale === 'en'" />
-                </template>
-            </UButton>
-        </UDropdown>
+        <div class="switcher">
+            <Icon name="emojione:flag-for-united-states" />
+            <UToggle @click="update" :disabled="animating" v-model="isRussian" :ui='{ "inactive": "bg-{color}-500 dark:bg-{color}-400" }' />
+            <Icon name="emojione:flag-for-russia" />
+        </div>
         <template #fallback>
-            <UButton color="white" class="fallback-button">
-                <Icon class="loader" name="svg-spinners:6-dots-rotate"/>
-            </UButton>
+            <Icon name="emojione:flag-for-united-states" />
+            <button class="relative inline-flex h-5 w-9 flex-shrink-0 border-2 border-transparent disabled:cursor-not-allowed disabled:opacity-50 focus:outline-none rounded-full focus-visible:ring-2 focus-visible:ring-primary-500 dark:focus-visible:ring-primary-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-900"></button>
+            <Icon name="emojione:flag-for-russia" />
         </template>
     </ClientOnly>
 </template>
 
 <style scoped lang="scss">
-.selector-button,
-.fallback-button {
+.switcher {
     display: flex;
-    justify-content: center;
     align-items: center;
-    width: 95px;
-    height: 32px;
-
-    > .loader {
-        opacity: 0.8;
-        transform: scale(1.1);
-    }
+    gap: 1rem;
 }
 </style>

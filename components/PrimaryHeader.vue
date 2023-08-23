@@ -230,7 +230,7 @@ header {
         height: 0.5px;
         bottom: 0;
         left: 0;
-        background-color: rgba(255, 255, 255, 0.5);
+        background-color: rgb(var(--color-primary-500) / 0.4);
         visibility: hidden;
         -webkit-transform: scaleX(0) translateY(0.3rem);
         transform: scaleX(0) translateY(0.3rem);
