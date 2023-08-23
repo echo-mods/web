@@ -44,7 +44,7 @@ const steps: step[] = [
 <template>
     <div id="roadmap" ref="container" :style="{ backgroundPosition: `${scroll.px / 100}%` }">
         <div class="shadow"></div>
-        <h1 class="hero">Roadmap</h1>
+        <h1 class="hero" :text="$t('rm_hero')">{{ $t("rm_hero") }}</h1>
         <div class="line" :style="{ height: `${scroll.px + 100}px` }"></div>
         <div class="indicator" :style="{ opacity: 1 - (scroll.px / 50) }">
             <Icon name="gg:mouse"/>
@@ -61,14 +61,15 @@ const steps: step[] = [
     display: flex;
     flex-direction: column;
     align-items: center;
-    > * {
-        user-select: none;
-    }
     position: relative;
-    gap: 15rem;
+    gap: 5rem;
     background-color: rgb(10,10,10);;
     background-image: radial-gradient(rgba(255,255,255,0.25) 0.6px, rgba(0,0,0,0) 0.5px);
     background-size: 20px 20px;
+    padding-bottom: 240px;
+    > * {
+        user-select: none;
+    }
 }
 
 .shadow {
@@ -89,6 +90,18 @@ const steps: step[] = [
     text-transform: uppercase;
     font-family: "Stalker";
     margin-top: 3rem;
+    position: relative;
+    color: rgb(var(--color-primary-500));
+    &::after {
+        content: attr(text);
+        top: 0;
+        left: 0;
+        position: absolute;
+        scale: 1.05;
+        z-index: 0;
+        color: white;
+        filter: drop-shadow(0 0 1rem rgb(var(--color-primary-500)));
+    }
 }
 
 .line {
@@ -114,6 +127,7 @@ const steps: step[] = [
     transition: all 0.1s;
     display: flex;
     gap: 1rem;
+    margin-top: 10rem;
     svg {
         font-size: 3rem;
         &.arrow {

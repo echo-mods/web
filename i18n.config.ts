@@ -33,6 +33,7 @@ export default defineI18nConfig(() => ({
             signup_heading: "Регистрация аккаунта",
             switch_auth_mod_l: "Еще нет аккаунта?",
             switch_auth_mod_s: "Уже есть аккаунт?",
+            rm_hero: "Планы",
         },
         en: {
             "null": "",
@@ -66,6 +67,7 @@ export default defineI18nConfig(() => ({
             signup_heading: "Create an account",
             switch_auth_mod_l: "Don't have an account?",
             switch_auth_mod_s: "Already have an account?",
+            rm_hero: "Roadmap",
         },
     },
 }));

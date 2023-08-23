@@ -127,9 +127,9 @@ watchEffect(() => {
     height: 100%;
     width: 100%;
     background-color: rgba(15,15,15,0.5);
-    backdrop-filter: blur(2rem);
+    backdrop-filter: blur(3rem);
     transition: none;
-
+    z-index: 100;
     &.slide {
         left: 100%;
         transition: all 1s ease-in-out;

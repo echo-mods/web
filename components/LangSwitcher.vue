@@ -63,7 +63,7 @@ watchEffect(() => {
             <UButton class="selector-button" color="white" :label="locale === 'en' ? 'English' : 'Русский'" :disabled="animating">
                 <template #leading>
                     <Icon name="emojione:flag-for-russia" v-if="locale === 'ru'" />
-                    <Icon name="emojione:flag-for-united-states" v-else="locale === 'en'" />
+                    <Icon name="emojione:flag-for-united-states" v-else-if="locale === 'en'" />
                 </template>
             </UButton>
         </UDropdown>

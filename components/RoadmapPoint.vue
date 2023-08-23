@@ -17,7 +17,7 @@ onMounted(() => {
             <div class="connector" :style="{ translate: index % 2 === 0 ? `` : `-100%` }"></div>
         </div>
         <div class="info" :style="{ translate: index % 2 === 0 ? `calc(4rem + 50%)` : `calc(-4rem - 50%)` }">
-            <Icon :name="data.icon"/>
+            <Icon v-if="data.icon" :name="data.icon"/>
             <div class="text">
                 <h1>{{ data.title }}</h1>
                 <h2>{{ data.date }}</h2>
