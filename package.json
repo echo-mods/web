@@ -29,5 +29,10 @@
   "dependencies": {
     "@nuxtjs/robots": "^3.0.0",
     "nuxt-appwrite": "^1.0.4"
+  },
+  "pnpm": {
+    "overrides": {
+      "semver@>=6.0.0 <6.3.1": ">=6.3.1"
+    }
   }
 }
