@@ -26,6 +26,7 @@ watchEffect(() => {
 </template>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400&family=Rubik+Vinyl&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;600;700;800&display=swap');
 @font-face {
     font-family: Stalker;
