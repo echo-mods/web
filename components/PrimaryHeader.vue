@@ -156,6 +156,7 @@ watchEffect(() => {
 }
 
 .target {
+    pointer-events: none;
     position: absolute;
     bottom: 2vw;
     left: 2vw;
@@ -171,7 +172,7 @@ watchEffect(() => {
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.8);
 
     >svg {
-        font-size: 2.5rem;
+        font-size: 1.5rem;
     }
 }
 
