@@ -77,6 +77,7 @@ const show_profile_dropdown = true
 
 
 const animating = useState("translation-animating")
+const animating_to_lang: Ref<string> = useState("translation-animating-target")
 
 watchEffect(() => {
     if (animating.value === true) {
@@ -110,13 +111,29 @@ watchEffect(() => {
             <LangSwitcher />
             <UDropdown v-if="show_profile_dropdown" :items="profile_menu" :popper="{ placement: 'bottom-start' }">
                 <div class="profile-btn">
-                    <UAvatar v-if="useUser !== undefined && typeof useUser === 'object' && useUser['name']" :alt="`${useUser.name.first} ${useUser.name.last}`" />
-                    <UIcon v-else name="i-heroicons-user-20-solid"/>
+                    <UAvatar v-if="useUser !== undefined && typeof useUser === 'object' && useUser['name']"
+                        :alt="`${useUser.name.first} ${useUser.name.last}`" />
+                    <UIcon v-else name="i-heroicons-user-20-solid" />
                 </div>
             </UDropdown>
         </div>
     </header>
-    <div v-if="!(route.path.startsWith('/news/ru') || route.path.startsWith('/news/en'))" class="translation-effect" :class="{ slide: animating }"></div>
+    <ClientOnly>
+        <div v-if="!(route.path.startsWith('/news/ru') || route.path.startsWith('/news/en'))" class="translation-effect"
+            :class="{ slide: animating }"></div>
+        <TransitionGroup name="lang_indicator">
+            <div class="target ru" v-if="animating_to_lang === 'ru' && animating">
+                <Icon name="circle-flags:us" />
+                <Icon name="line-md:arrow-left" style="rotate: 180deg;" />
+                <Icon name="circle-flags:ru" />
+            </div>
+            <div class="target en" v-else-if="animating">
+                <Icon name="circle-flags:ru" />
+                <Icon name="line-md:arrow-left" style="rotate: 180deg;" />
+                <Icon name="circle-flags:us" />
+            </div>
+        </TransitionGroup>
+    </ClientOnly>
 </template>
 
 <style scoped lang="scss">
@@ -126,15 +143,38 @@ watchEffect(() => {
     top: 0;
     height: 100%;
     width: 100%;
-    background-color: rgba(15,15,15,0.5);
+    background-color: rgba(15, 15, 15, 0.5);
     backdrop-filter: blur(3rem);
     transition: none;
     z-index: 100;
+
     &.slide {
         left: 100%;
         transition: all 1s ease-in-out;
     }
+
 }
+
+.target {
+    position: absolute;
+    bottom: 2vw;
+    left: 2vw;
+    translate: 0 -25%;
+    display: flex;
+    gap: 1rem;
+    z-index: 101;
+    border-radius: 0.5rem;
+    background-color: rgba(255,255,255,0.1);
+    padding: 0.8rem;
+    border: 2px solid rgba(255,255,255,0.3);
+    backdrop-filter: blur(1px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.8);
+
+    >svg {
+        font-size: 2.5rem;
+    }
+}
+
 
 header {
     height: 4rem;
@@ -154,10 +194,12 @@ header {
         aspect-ratio: 1;
         transition: all 0.3s;
     }
+
     .home:hover {
         transform: translateY(0.2rem);
         transition: all 0.6s;
     }
+
     .primary {
         position: absolute;
         aspect-ratio: 1;
@@ -254,10 +296,11 @@ header {
     align-items: center;
     gap: 1rem;
     margin-left: auto;
+
     .divider {
         width: 1px;
         height: 2rem;
-        background-color: rgba(255,255,255,0.5);
+        background-color: rgba(255, 255, 255, 0.5);
     }
 }
 
@@ -270,8 +313,22 @@ header {
     border-radius: 5rem;
     border: 1px rgba(255, 255, 255, 0.3) solid;
 }
+
+.lang_indicator-enter-active,
+.lang_indicator-leave-active {
+    transition: all 0.5s;
+}
+
+.lang_indicator-enter-from,
+.lang_indicator-leave-to {
+    opacity: 0;
+    translate: 0 25%;
+}
+
 @media (max-width: 850px) {
-    .right > .divider, .download_btn {
+
+    .right>.divider,
+    .download_btn {
         display: none;
     }
 }
@@ -280,5 +337,4 @@ header {
     .links {
         display: none;
     }
-}
-</style>
+}</style>

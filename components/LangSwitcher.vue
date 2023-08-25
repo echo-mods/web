@@ -1,20 +1,22 @@
 <script setup lang="ts">
-const { locale, setLocale } = useI18n()
+const { locale: locale_g } = useI18n()
 
 const route = useRoute()
 
-const isRussian = ref(locale.value === "ru")
+const isRussian = ref(locale_g.value === "ru")
 
 const animating: Ref<boolean> = useState("translation-animating")
+const animating_to_lang: Ref<string> = useState("translation-animating-target")
 
 const animateLocale = (locale: "en" | "ru") => {
+    animating_to_lang.value = locale
     if (!(route.path.startsWith(`/news/${locale}`) || route.path.startsWith(`/news/${locale}`))) {
         animating.value = true
         setTimeout(() => {
-            setLocale(locale)
+            locale_g.value = locale
         }, 500);
     } else {
-        setLocale(locale)
+        locale_g.value = locale
     }
 }
 

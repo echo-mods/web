@@ -2,12 +2,19 @@
 export default defineNuxtConfig({
     css: ["~/assets/css/tailwind.css"],
     devtools: { enabled: true },
-    modules: [ '@nuxtjs/robots', "@nuxtjs/i18n", "@nuxthq/ui", "nuxt-icon", "@nuxt/content", 'nuxt-gtag' ],
+    modules: [
+        "@nuxtjs/robots",
+        "@nuxtjs/i18n",
+        "@nuxthq/ui",
+        "nuxt-icon",
+        "@nuxt/content",
+        "nuxt-gtag",
+    ],
     routeRules: {
         "/": { prerender: true },
     },
     app: {
-        pageTransition: { name: 'page', mode: 'out-in' }
+        pageTransition: { name: "page", mode: "out-in" },
     },
     i18n: {
         strategy: "no_prefix",
@@ -18,7 +25,7 @@ export default defineNuxtConfig({
         },
     },
     gtag: {
-      id: 'G-ZZRS317TRT'
+        id: "G-ZZRS317TRT",
     },
     colorMode: {
         preference: "dark",
