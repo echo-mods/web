@@ -15,6 +15,11 @@ watchEffect(() => {
         }
     })
 })
+
+
+onMounted(() => {
+	document.documentElement.classList.add("dark")
+})
 </script>
 
 <template>

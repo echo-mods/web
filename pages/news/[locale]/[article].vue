@@ -83,6 +83,20 @@ watchEffect(() => {
         border-radius: 0.5rem;
         outline: 1px solid rgba(255, 255, 255, 0.3);
     }
+    li {
+        list-style: initial;
+        margin-left: 2rem;
+    }
+    blockquote {
+        padding: 1px 1rem;
+        border-left: 1px solid rgba(255,255,255,0.3);
+        border-right: 1px solid rgba(255,255,255,0.3);
+        border-radius: 1rem;
+        width: fit-content;
+        > p {
+            margin: 0.5rem 0;
+        }
+    }
 }
 
 @media (max-width: 600px) {
