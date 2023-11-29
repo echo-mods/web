@@ -105,9 +105,9 @@ defineShortcuts({
     width: 50%;
     margin: 1rem 25%;
     padding: 3rem 5rem;
-    border-radius: 8px;
+    border-radius: 1rem;
+    border: 1px rgb(var(--color-primary-DEFAULT) / 0.7) solid;
     backdrop-filter: blur(1px);
-    border: 1px rgba(255, 255, 255, 0.3) solid;
     display: flex;
     flex-direction: column;
     gap: 1rem;

@@ -1,5 +1,10 @@
 <script setup lang="ts">
-const { api_endpoint } = useAppConfig()
+definePageMeta({
+    name: 'Explore',
+    ru_name: 'Моды',
+    horizonal_id: 4
+})
+
 const { locale } = useI18n()
 
 /*
@@ -11,37 +16,32 @@ const { pending, data: cards } = await useFetch(`${api_endpoint}mods`, {
 const cards = ref()
 
 const pending = ref(true)
-
-setTimeout(() => {
-    pending.value = false
-    cards.value = [
-        {
-            "name": "Инкубатор",
-            "description": "В модификации представлена новая история со средней продолжительностью, наполненная кат-сценами с озвучкой персонажей, а также с интригами, мистикой и перестрелками. Новый проект не будет связан с прошлыми работами командами («Контракт На Хорошую Жизнь», «Контракт На Новую Жизнь»), но отсылки и встреча со знакомыми персонажами точно гарантирована.",
-            "rating": 5.0,
-            "imageURL": "https://i.ibb.co/GnNDDpG/awr1-Sz-U7m80.jpg",
-            "logoURL": "",
-            "socialLink": "",
-            "content": [
-                "iRbeC_BbMqM",
-                "https://i.ibb.co/L8L21Zt/b-Elye-Qe-ENw.jpg",
-                "https://i.ibb.co/ckLXnSx/f-Zni-PLy-Gmdk.jpg",
-                "https://i.ibb.co/H4ShXbT/lfrc-Sx-IJI5g.jpg",
-                "https://i.ibb.co/r4xKWhJ/P5cc-O626-LGk.jpg"
-            ],
-            "platform": "Зов припяти",
-            "downloadURL": "http://ipv4.download.thinkbroadband.com/512MB.zip",
-            "archive_type": "zip",
-            "standalone": true,
-            "game_required": "soc"
-        }
-    ]
-}, 100);
-
-definePageMeta({
-    name: 'Explore',
-    ru_name: 'Моды',
-    horizonal_id: 4
+onMounted(() => {
+	setTimeout(() => {
+		pending.value = false
+		cards.value = [
+			{
+				"name": "Инкубатор",
+				"description": "В модификации представлена новая история со средней продолжительностью, наполненная кат-сценами с озвучкой персонажей, а также с интригами, мистикой и перестрелками. Новый проект не будет связан с прошлыми работами командами («Контракт На Хорошую Жизнь», «Контракт На Новую Жизнь»), но отсылки и встреча со знакомыми персонажами точно гарантирована.",
+				"rating": 5.0,
+				"imageURL": "https://i.ibb.co/GnNDDpG/awr1-Sz-U7m80.jpg",
+				"logoURL": "",
+				"socialLink": "",
+				"content": [
+					"iRbeC_BbMqM",
+					"https://i.ibb.co/L8L21Zt/b-Elye-Qe-ENw.jpg",
+					"https://i.ibb.co/ckLXnSx/f-Zni-PLy-Gmdk.jpg",
+					"https://i.ibb.co/H4ShXbT/lfrc-Sx-IJI5g.jpg",
+					"https://i.ibb.co/r4xKWhJ/P5cc-O626-LGk.jpg"
+				],
+				"platform": "Зов припяти",
+				"downloadURL": "http://ipv4.download.thinkbroadband.com/512MB.zip",
+				"archive_type": "zip",
+				"standalone": true,
+				"game_required": "soc"
+			}
+		]
+	}, 1000);
 })
 </script>
 

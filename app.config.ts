@@ -4,7 +4,6 @@ export default defineAppConfig({
         gray: "stone",
         icons: []
     },
-    api_endpoint: "http://localhost:3001/api/", //"http://silentiumgit.ignorelist.com:3000/api/",
     news: [
         "net-online-info",
         "old-concept-info",

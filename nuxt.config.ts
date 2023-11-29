@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     css: ["~/assets/css/tailwind.css"],
-    devtools: { enabled: true },
+    devtools: { enabled: false },
     modules: [
         "@nuxtjs/robots",
         "@nuxtjs/i18n",
@@ -12,7 +12,6 @@ export default defineNuxtConfig({
         "@nuxtjs/supabase"
     ],
     routeRules: {
-        "/": { prerender: true },
         "/mods": {
             redirect: "/explore"
         }
@@ -37,9 +36,6 @@ export default defineNuxtConfig({
     },
     colorMode: {
         preference: "dark",
-    },
-    experimental: {
-        componentIslands: true,
     },
     vue: {
         compilerOptions: {

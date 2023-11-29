@@ -72,7 +72,7 @@ const steps: step[] = [
     position: relative;
     gap: 5rem;
     padding-bottom: 50vh;
-	pointer-events: none;
+	pointer-events: scroll;
 
     >* {
 		pointer-events: all;
