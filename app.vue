@@ -24,7 +24,6 @@ onMounted(() => {
 </script>
 
 <template>
-    <input type="file" id="file_upload" />
     <NuxtLayout>
         <NuxtPage />
         <UNotifications />

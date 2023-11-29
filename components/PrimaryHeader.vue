@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { useMediaQuery } from "@vueuse/core";
 const { locale } = useI18n();
 const route = useRoute();
+const router = useRouter()
 
 const links = [
     {
@@ -25,7 +27,7 @@ const links = [
     },
 ];
 
-let dashboard_text = ref("");
+let account_text = ref("");
 let login_text = ref("");
 let logout_text = ref("");
 
@@ -38,8 +40,8 @@ const user = useSupabaseUser();
 const { auth } = useSupabaseClient();
 
 watchEffect(() => {
-    dashboard_text.value =
-        locale.value === "en" ? "Dashboard" : "Личный кабинет";
+    account_text.value =
+        locale.value === "en" ? "My account" : "Личный кабинет";
     login_text.value = locale.value === "en" ? "Log in" : "Войти";
     logout_text.value = locale.value === "en" ? "Log out" : "Выйти";
     option_b.value = !user.value
@@ -54,7 +56,10 @@ watchEffect(() => {
               click: async () => {
                   await auth.signOut();
                   toast.add({
-                      title: locale.value === "en" ? "Logged out" : "Вы успешно вышли",
+                      title:
+                          locale.value === "en"
+                              ? "Logged out"
+                              : "Вы успешно вышли",
                   });
               },
           };
@@ -74,8 +79,8 @@ watchEffect(() => {
         ],
         [
             {
-                label: dashboard_text.value,
-                to: "/dashboard",
+                label: account_text.value,
+                to: "/account",
             },
         ],
         [option_b.value],
@@ -93,10 +98,61 @@ watchEffect(() => {
         }, 1500);
     }
 });
+const isMobile = process.client ? useMediaQuery("(max-width: 750px)") : ref(true);
+const mhOpen = useState("mobile_header_open", () => false);
+
+router.afterEach(() => mhOpen.value = false)
 </script>
 
 <template>
-    <header>
+	<header v-if="isMobile" style="opacity: 0;"></header>
+    <Transition name="mobile-header">
+        <header v-show="isMobile && mhOpen" class="__global-mobile-header">
+            <div class="links">
+                <NuxtLink v-for="link in links" :to="link.route">
+                    <span :class="{ current: route.path === link.route }">{{
+                        locale === "en" ? link.text : link.ru_text
+                    }}</span>
+                </NuxtLink>
+            </div>
+            <div class="right">
+                <a download="" class="download_btn" href="/" target="_blank">
+                    <UButton>{{ $t("call_to_download") }}</UButton>
+                </a>
+                <div class="divider" />
+                <LangSwitcher />
+                <div class="divider" />
+                <UDropdown
+                    v-if="show_profile_dropdown"
+                    :items="profile_menu"
+                    :popper="{ placement: 'bottom-start' }"
+                >
+                    <UAvatar
+                        icon="i-heroicons-user-20-solid"
+                        :style="{
+                            border: user
+                                ? `unset`
+                                : `1px solid rgba(255, 255, 255, 0.5)`,
+                        }"
+                        :src="user ? user.user_metadata.avatar_url : undefined"
+                    />
+                    <template #account="{ item }">
+                        <div class="text-left">
+                            <p v-if="!user">
+                                {{ item.label }}
+                            </p>
+                            <p
+                                class="w-44 text-xs text-ellipsis overflow-hidden whitespace-nowrap font-medium text-gray-900 dark:text-white"
+                            >
+                                {{ user?.user_metadata.user_name }}
+                            </p>
+                        </div>
+                    </template>
+                </UDropdown>
+            </div>
+        </header>
+    </Transition>
+    <header :class="{ mobile: isMobile }">
         <NuxtLink to="/" class="home">
             <img class="primary" src="/logo.png" />
             <img class="shadow" src="/logo.png" />
@@ -104,48 +160,58 @@ watchEffect(() => {
             <img class="shadow" src="/logo.png" />
             <img class="shadow" src="/logo.png" />
         </NuxtLink>
-        <div class="links">
-            <NuxtLink v-for="link in links" :to="link.route">
-                <span :class="{ current: route.path === link.route }">{{
-                    locale === "en" ? link.text : link.ru_text
-                }}</span>
-            </NuxtLink>
-        </div>
-        <div class="right">
-            <a download="" class="download_btn" href="/" target="_blank">
-                <UButton>{{ $t("call_to_download") }}</UButton>
-            </a>
-            <div class="divider" />
-            <LangSwitcher />
-            <div class="divider" />
-            <UDropdown
-                v-if="show_profile_dropdown"
-                :items="profile_menu"
-                :popper="{ placement: 'bottom-start' }"
-            >
-                <UAvatar
-                    icon="i-heroicons-user-20-solid"
-                    :style="{
-                        border: user
-                            ? `unset`
-                            : `1px solid rgba(255, 255, 255, 0.5)`,
-                    }"
-                    :src="user ? user.user_metadata.avatar_url : undefined"
-                />
-                <template #account="{ item }">
-                    <div class="text-left">
-                        <p v-if="!user">
-                            {{ item.label }}
-                        </p>
-                        <p
-                            class="w-44 text-xs text-ellipsis overflow-hidden whitespace-nowrap font-medium text-gray-900 dark:text-white"
-                        >
-                            {{ user?.user_metadata.user_name }}
-                        </p>
-                    </div>
-                </template>
-            </UDropdown>
-        </div>
+		<template v-if="!isMobile">
+			<div class="links">
+				<NuxtLink v-for="link in links" :to="link.route">
+					<span :class="{ current: route.path === link.route }">{{
+						locale === "en" ? link.text : link.ru_text
+					}}</span>
+				</NuxtLink>
+			</div>
+			<div class="right">
+				<a download="" class="download_btn" href="/" target="_blank">
+					<UButton>{{ $t("call_to_download") }}</UButton>
+				</a>
+				<div class="divider" />
+				<LangSwitcher />
+				<div class="divider" />
+				<UDropdown
+					v-if="show_profile_dropdown"
+					:items="profile_menu"
+					:popper="{ placement: 'bottom-start' }"
+				>
+					<UAvatar
+						icon="i-heroicons-user-20-solid"
+						:style="{
+							border: user
+								? `unset`
+								: `1px solid rgba(255, 255, 255, 0.5)`,
+						}"
+						:src="user ? user.user_metadata.avatar_url : undefined"
+					/>
+					<template #account="{ item }">
+						<div class="text-left">
+							<p v-if="!user">
+								{{ item.label }}
+							</p>
+							<p
+								class="w-44 text-xs text-ellipsis overflow-hidden whitespace-nowrap font-medium text-gray-900 dark:text-white"
+							>
+								{{ user?.user_metadata.user_name }}
+							</p>
+						</div>
+					</template>
+				</UDropdown>
+			</div>
+		</template>
+        <UButton
+            icon="i-heroicons-bars-4-20-solid"
+            variant="link"
+            v-if="isMobile"
+            size="xl"
+            style="margin-left: auto"
+            @click="mhOpen = !mhOpen"
+        />
     </header>
     <ClientOnly>
         <div
@@ -225,6 +291,33 @@ watchEffect(() => {
     }
 }
 
+.__global-mobile-header {
+    position: fixed;
+    backdrop-filter: blur(1rem) brightness(0.5);
+    inset: 0;
+    height: unset;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem 2rem;
+    padding-top: 5rem;
+	z-index: 2 !important;
+    .links {
+		margin-top: auto;
+        flex-direction: column;
+        align-items: center;
+    }
+    .right {
+        margin-left: unset;
+        margin-top: auto;
+        justify-content: space-between;
+        width: 100%;
+        .download_btn,
+        .divider {
+            display: none;
+        }
+    }
+}
+
 header {
     height: 4rem;
     margin: 0.75rem;
@@ -236,6 +329,13 @@ header {
     padding: 0 1rem;
     display: flex;
     align-items: center;
+
+	&.mobile {
+		z-index: 3;
+		position: fixed;
+		inset: 0;
+		bottom: unset;
+	}
 
     .home {
         position: relative;
@@ -364,16 +464,15 @@ header {
     translate: 0 25%;
 }
 
-@media (max-width: 850px) {
-    .right > .divider,
-    .download_btn {
-        display: none;
-    }
+//
+.mobile-header-enter-active,
+.mobile-header-leave-active {
+    transition: all 0.5s;
 }
 
-@media (max-width: 650px) {
-    .links {
-        display: none;
-    }
+.mobile-header-enter-from,
+.mobile-header-leave-to {
+    opacity: 0;
+    scale: 0.9;
 }
 </style>
