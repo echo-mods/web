@@ -2,63 +2,118 @@
 definePageMeta({
     name: "Roadmap",
     ru_name: "Планы",
-    horizonal_id: 3
-})
+    horizonal_id: 3,
+});
 
-const container = ref()
+const { locale } = useI18n();
+
+const container = ref();
 const scroll = reactive({
     percentage: 0,
-    px: 0
-})
+    px: 0,
+});
 
 const updateScrollPos = () => {
-    scroll.px = container.value.scrollTop
-    scroll.percentage = Math.round(container.value.scrollTop / (container.value.scrollHeight - container.value.offsetHeight) * 100)
-}
+    scroll.px = container.value.scrollTop;
+    scroll.percentage = Math.round(
+        (container.value.scrollTop /
+            (container.value.scrollHeight - container.value.offsetHeight)) *
+            100
+    );
+};
 
 onMounted(() => {
-    container.value.addEventListener("scroll", updateScrollPos)
-})
+    container.value.addEventListener("scroll", updateScrollPos);
+});
 
 onBeforeUnmount(() => {
     if (container.value) {
-        container.value.removeEventListener("scroll", updateScrollPos)
+        container.value.removeEventListener("scroll", updateScrollPos);
     }
-})
+});
 
 interface step {
-    icon?: string,
-    title: string,
-    date?: string
+    icon?: string;
+    title: string;
+    date?: string;
 }
 
-const steps: step[] = [
-    {
-        title: "Hello",
-        icon: "material-symbols:waving-hand-sharp",
-        date: "September 1, 2023"
-    },
-    {
-        title: "Goodbye",
-        icon: "material-symbols:directions-boat-rounded",
-        date: "May 31 2023"
-    },
-    {
-        title: "Test"
-    }
-]
+const steps = computed<step[]>(() => {
+    return locale.value === "en"
+        ? [
+              // English
+              {
+                  title: "Hello",
+                  icon: "material-symbols:waving-hand-sharp",
+                  date: "September 1, 2023",
+              },
+              {
+                  title: "Goodbye",
+                  icon: "material-symbols:directions-boat-rounded",
+                  date: "May 31 2023",
+              },
+              {
+                  title: "Test",
+              },
+          ]
+        : [
+              // Russian
+              {
+                  title: "Пока браточек",
+                  icon: "material-symbols:waving-hand-sharp",
+                  date: "September 1, 2023",
+              },
+              {
+                  title: "Пока",
+                  icon: "material-symbols:directions-boat-rounded",
+                  date: "May 31 2023",
+              },
+              {
+                  title: "Оп оп тест)",
+              },
+          ];
+});
+
+const finalCard = computed(() => {
+    return {
+        title: locale.value === "en" ? "Next Chapter" : "Следующая Глава",
+        detail:
+            locale.value === "en"
+                ? "Stay tuned for exciting developments as we continue our journey."
+                : "Ожидайте крупных событий по мере продолжения нашего пути.",
+    };
+});
 </script>
 
 <template>
-    <div id="roadmap" class="__roadmap" ref="container" :style="{ backgroundPosition: `${scroll.px / 100}%` }">
+    <div
+        id="roadmap"
+        class="__roadmap"
+        ref="container"
+        :style="{ backgroundPosition: `${scroll.px / 100}%` }"
+    >
         <h1 class="hero" :text="$t('rm_hero')">{{ $t("rm_hero") }}</h1>
         <div class="line" :style="{ height: `${scroll.px + 100}px` }"></div>
-        <div class="indicator" :style="{ opacity: 1 - (scroll.px / 50) }">
+        <div class="indicator" :style="{ opacity: 1 - scroll.px / 50 }">
             <Icon class="mouse" name="gg:mouse" />
             <Icon class="touch" name="material-symbols:touch-app-outline" />
             <Icon class="arrow" name="line-md:chevron-left" />
         </div>
-        <RoadmapPoint v-for="(data, index) in steps" :data="data" :index="index" :scroll="scroll.px" />
+        <RoadmapPoint
+            v-for="(data, index) in steps"
+            :data="data"
+            :index="index"
+            :scroll="scroll.px"
+        />
+        <div
+            class="end flex flex-col items-center justify-center"
+            :class="{ enabled: scroll.percentage >= 95 }"
+        >
+            <h1 class="opacity-95 text-xl text-center">
+                {{ finalCard.title }}
+            </h1>
+            <p class="opacity-40 text-center">{{ finalCard.detail }}</p>
+        </div>
     </div>
 </template>
 
@@ -72,10 +127,9 @@ const steps: step[] = [
     position: relative;
     gap: 5rem;
     padding-bottom: 50vh;
-	pointer-events: scroll;
+    pointer-events: scroll;
 
-    >* {
-		pointer-events: all;
+    > * {
         user-select: none;
     }
 
@@ -108,6 +162,7 @@ const steps: step[] = [
     &:hover {
         perspective: 200px;
         transform: scale(1.1);
+        filter: drop-shadow(0 0 5rem rgb(var(--color-primary-500)));
     }
 }
 
@@ -128,6 +183,45 @@ const steps: step[] = [
         top: 0;
         left: 50%;
         transform: translate(-50%, -50%);
+    }
+}
+
+.end {
+    --cont-width: 20rem;
+    --cont-height: 10rem;
+    position: fixed;
+    top: 475px;
+    //
+    border-radius: 1rem;
+    padding: 1rem;
+    border: 0.2rem solid rgb(var(--color-primary-500));
+    overflow: hidden;
+    //
+    translate: -0.4px -0.1rem;
+    width: var(--cont-width);
+    height: var(--cont-height);
+    padding: 2rem;
+    transition: all 0.5s ease-in-out;
+    display: flex;
+    opacity: 0.8;
+    flex-direction: column;
+
+    h1,
+    p {
+        transition: all 1s ease-in-out 1s;
+    }
+    box-shadow: 0 0 2rem rgb(var(--color-primary-500)) inset;
+    &:not(.enabled) {
+        width: 0;
+        height: 0;
+        padding: 0;
+        opacity: 1;
+        transition: all 0.25s ease-in-out;
+        h1,
+        p {
+            opacity: 0;
+            transition: all 0.1s ease-in-out;
+        }
     }
 }
 
@@ -178,7 +272,15 @@ const steps: step[] = [
         transition: all 0.1s;
         left: 20vw;
     }
-    
+
+    .end {
+        top: unset;
+        bottom: 2rem;
+        &:not(.enabled) {
+            opacity: 0;
+        }
+    }
+
     .shadow {
         box-shadow: 0 0 1rem 2rem rgb(10, 10, 10) inset;
     }
@@ -194,4 +296,5 @@ const steps: step[] = [
             rotate: 90deg;
         }
     }
-}</style>
+}
+</style>
