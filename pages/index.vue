@@ -1,4 +1,6 @@
 <script setup lang="ts">
+// TypeScript код для интерактивности
+
 definePageMeta({
     name: 'Home',
     ru_name: 'Домашняя',
@@ -87,43 +89,47 @@ watch(locale, refreshSlides)
 </script>
 
 <template>
-    <section id="hero-container">
-        <div class="hover-overlay"></div>
-        <Transition name="image" mode="out-in">
-            <img :style="{ filter: currentData.image_filters }" :key="currentData.id" class="background"
-                :src="currentData.background" :alt="currentData.short_title">
-        </Transition>
-        <Transition name="primary" mode="out-in">
-            <img v-if="currentData.title.type === 'image'" :key="(currentData.id || 0) + 1" class="primary-image"
-                :src="currentData.title.data" />
-        </Transition>
-        <Transition name="primary" mode="out-in">
-            <h1 v-if="currentData.title.type === 'text'" :key="currentData.id" class="title">{{ currentData.title.data }}
-            </h1>
-        </Transition>
-        <Transition name="secondary" mode="out-in">
-            <div :key="currentData.id" class="secondary-content">
-                <h2 class="subtitle">{{ currentData.subtitle }}</h2>
-                <p class="content">{{ currentData.content }}</p>
-                <NuxtLink v-if="currentData.article_url" :to="currentData.article_url">
-                    <UButton icon="i-heroicons-book-open" :label="$t('read_more')" variant="link" class="action"/>
-                </NuxtLink>
-            </div>
-        </Transition>
-        <div class="cards" v-if="slidesReactive.length > 1">
-            <div class="card" v-for="(data, index) in slidesReactive" :tabindex="index" @click="setIndex(index)"
-                :style="{ height: `calc(${100 / slidesReactive.length}% - ${4 / slidesReactive.length}rem)` }">
-                <img class="background" :src="data.background" />
-                <div class="overlay" :class="{ current: index === currentIndex }"></div>
-                <div class="data">
-                    <p class="title">{{ data.short_title }}</p>
+    <div class="__home">
+        <section id="hero-container">
+            <div class="hover-overlay"></div>
+            <Transition name="image" mode="out-in">
+                <img :style="{ filter: currentData.image_filters }" :key="currentData.id" class="background"
+                    :src="currentData.background" :alt="currentData.short_title">
+            </Transition>
+            <Transition name="primary" mode="out-in">
+                <img v-if="currentData.title.type === 'image'" :key="(currentData.id || 0) + 1" class="primary-image"
+                    :src="currentData.title.data" />
+            </Transition>
+            <Transition name="primary" mode="out-in">
+                <h1 v-if="currentData.title.type === 'text'" :key="currentData.id" class="title">{{ currentData.title.data }}
+                </h1>
+            </Transition>
+            <Transition name="secondary" mode="out-in">
+                <div :key="currentData.id" class="secondary-content">
+                    <h2 class="subtitle">{{ currentData.subtitle }}</h2>
+                    <p class="content">{{ currentData.content }}</p>
+                    <NuxtLink v-if="currentData.article_url" :to="currentData.article_url">
+                        <UButton icon="i-heroicons-book-open" :label="$t('read_more')" variant="link" class="action"/>
+                    </NuxtLink>
+                </div>
+            </Transition>
+            <div class="cards" v-if="slidesReactive.length > 1">
+                <div class="card" v-for="(data, index) in slidesReactive" :tabindex="index" @click="setIndex(index)"
+                    :style="{ height: `calc(${100 / slidesReactive.length}% - ${4 / slidesReactive.length}rem)` }">
+                    <img class="background" :src="data.background" />
+                    <div class="overlay" :class="{ current: index === currentIndex }"></div>
+                    <div class="data">
+                        <p class="title">{{ data.short_title }}</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
 </template>
 
 <style lang="scss">
+// В данном случае SCSS код для стилизации
+
 #hero-container {
     margin: 0 5%;
     width: calc(90%);

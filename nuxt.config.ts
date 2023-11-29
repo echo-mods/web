@@ -5,18 +5,26 @@ export default defineNuxtConfig({
     modules: [
         "@nuxtjs/robots",
         "@nuxtjs/i18n",
-        "@nuxthq/ui",
+        "@nuxt/ui",
         "nuxt-icon",
         "@nuxt/content",
         "nuxt-gtag",
+        "@nuxtjs/supabase"
     ],
     routeRules: {
         "/": { prerender: true },
+        "/mods": {
+            redirect: "/explore"
+        }
     },
+	supabase: {
+		redirect: false
+	},
     app: {
         pageTransition: { name: "page", mode: "out-in" },
     },
     i18n: {
+		vueI18n: 'i18n.config.ts', 
         strategy: "no_prefix",
         locales: ["ru", "en"], // used in URL path prefix
         defaultLocale: "ru", // default locale of your project for Nuxt pages and routings

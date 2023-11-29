@@ -6,24 +6,28 @@ const yHeight = ref(0)
 const container = ref()
 
 onMounted(() => {
-    yPos.value = container.value.offsetTop
-    yHeight.value = container.value.offsetHeight
+    setTimeout(() => {
+        yPos.value = container.value.offsetTop
+        yHeight.value = container.value.offsetHeight
+    }, 1000);
 })
 </script>
 
 <template>
-    <div class="container" ref="container" :style="{ opacity: 1 - (yPos + yHeight / 2 - scroll - 380) / 50 }">
-        <div class="dot">
-            <div class="connector" :style="{ translate: index % 2 === 0 ? `` : `-100%` }"></div>
-        </div>
-        <div class="info" :style="{ translate: index % 2 === 0 ? `calc(4rem + 50%)` : `calc(-4rem - 50%)` }">
-            <Icon v-if="data.icon" :name="data.icon"/>
-            <div class="text">
-                <h1>{{ data.title }}</h1>
-                <h2>{{ data.date }}</h2>
+    <ClientOnly>
+        <div class="container" ref="container" :style="{ opacity: 1 - (yPos + yHeight / 2 - scroll - 380) / 50 }">
+            <div class="dot">
+                <div class="connector" :style="{ translate: index % 2 === 0 ? `` : `-100%` }"></div>
+            </div>
+            <div class="info" :style="{ translate: index % 2 === 0 ? `calc(4rem + 50%)` : `calc(-4rem - 50%)` }">
+                <Icon v-if="data.icon" :name="data.icon"/>
+                <div class="text">
+                    <h1>{{ data.title }}</h1>
+                    <h2>{{ data.date }}</h2>
+                </div>
             </div>
         </div>
-    </div>
+    </ClientOnly>
 </template>
 
 <style scoped lang="scss">
@@ -57,11 +61,12 @@ onMounted(() => {
         display: flex;
         align-items: center;
         gap: 1rem;
-        background-color: rgba(255, 255, 255, 0.1);
+        background-color: rgba(255, 255, 255, 0.02);
         width: auto;
         padding: 1rem;
         border-radius: 0.5rem;
-        border: 2px solid rgba(255, 255, 255, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(1rem);
         > svg {
             font-size: 2rem;
         }

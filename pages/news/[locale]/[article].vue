@@ -6,10 +6,10 @@ definePageMeta({
 })
 
 const { locale } = useI18n()
-const { fullPath } = useRoute()
+const { path } = useRoute()
 const { replace } = useRouter()
 const articleTitle = useState("newsArticleTitle")
-const { data } = await useAsyncData(fullPath, () => queryContent(fullPath).findOne())
+const { data } = await useAsyncData(path, () => queryContent(path).findOne())
 
 onMounted(() => {
     if (data.value) {
@@ -23,22 +23,22 @@ onUnmounted(() => {
 
 watchEffect(() => {
     const opposite_lang = locale.value === "en" ? "ru" : "en"
-    if (fullPath.startsWith(`/news/${opposite_lang}/`)) {
-        const newPath = fullPath.replace(opposite_lang, locale.value || opposite_lang)
+    if (path.startsWith(`/news/${opposite_lang}/`)) {
+        const newPath = path.replace(opposite_lang, locale.value || opposite_lang)
         replace(newPath)
     }
 })
 </script>
 
 <template>
-    <section id="news-article">
+    <div class="__news-article">
         <ContentDoc />
-    </section>
+    </div>
 </template>
 
 <style lang="scss">
 
-#news-article {
+.__news-article {
     padding: 1rem;
     width: 70%;
     margin: 1rem 15%;
@@ -100,7 +100,7 @@ watchEffect(() => {
 }
 
 @media (max-width: 600px) {
-    #news-article {
+    .__news-article {
         width: calc(100% - 2rem);
         margin: 1rem;
     }

@@ -89,7 +89,7 @@ watchEffect(() => {
 </script>
 
 <template>
-    <section id="news">
+    <div class="__news">
         <h1>{{ $t("news_title") }}</h1>
         <ClientOnly>
             <div class="news-container">
@@ -151,11 +151,11 @@ watchEffect(() => {
                 </div>
             </template>
         </ClientOnly>
-    </section>
+    </div>
 </template>
 
 <style scoped lang="scss">
-#news {
+.__news {
     padding: 1rem 15vw;
     width: 100vw;
     > h1 {

@@ -10,7 +10,7 @@ export default defineI18nConfig(() => ({
             req_false: "Не требует Оригинал",
             download_torrent: "Скачать с помощью torrent",
             login: "Войти",
-            login_heading: "Войти в личный кабинет",
+            login_heading: "Войдите на сайт",
             logging_in: "...",
             lk_actions: "Действия",
             lk_mods: "Загруженные моды",
@@ -34,6 +34,9 @@ export default defineI18nConfig(() => ({
             switch_auth_mod_l: "Еще нет аккаунта?",
             switch_auth_mod_s: "Уже есть аккаунт?",
             rm_hero: "Планы",
+			username_word: "Имя пользователя",
+			conf_sent_title: "Мы выслали письмо-подтверждение вам на почту",
+			conf_sent_text: "Если не видите письмо, проверте папку 'спам'."
         },
         en: {
             "null": "",
@@ -44,7 +47,7 @@ export default defineI18nConfig(() => ({
             req_false: "Doesn't require original game",
             download_torrent: "Download using torrent",
             login: "Log in",
-            login_heading: "Log into dashboard",
+            login_heading: "Log in to your account",
             logging_in: "Logging in...",
             lk_actions: "Actions",
             lk_mods: "Uploaded mods",
@@ -68,6 +71,9 @@ export default defineI18nConfig(() => ({
             switch_auth_mod_l: "Don't have an account?",
             switch_auth_mod_s: "Already have an account?",
             rm_hero: "Roadmap",
+			username_word: "Username",
+			conf_sent_title: "Confirmation letter sent",
+			conf_sent_text: "Check your email for a confirmation letter. Be sure to check your spam if you don't see a letter right away."
         },
     },
 }));

@@ -5,7 +5,7 @@
   <ContentSlideshow />
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 .content-container {
   width: 100% !important;
 }

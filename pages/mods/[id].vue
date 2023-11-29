@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { _AsyncData } from 'nuxt/dist/app/composables/asyncData';
+import { Mod } from 'types/database';
+
 definePageMeta({
     validate: async (route) => {
         const { api_endpoint } = useAppConfig()
@@ -7,10 +10,13 @@ definePageMeta({
         return data.value !== null && data.value !== undefined
     }
 })
+
+
 // Page setup finished
 const route = useRoute()
 const { api_endpoint } = useAppConfig()
-const { data } = await useFetch(`${api_endpoint}mods/${route.params.id}`)   
+const res = await useFetch(`${api_endpoint}mods/${route.params.id}`)
+const { data } = res as _AsyncData<Mod, null>
 
 watchEffect(async () => {
     useHead({
@@ -21,12 +27,9 @@ watchEffect(async () => {
 </script>
 
 <template>
-    <section id="mod-details">
+    <div class="__mod-details">
         <ContentSlideshow :content="data.content" />
         <div class="data-container">
-            <a :href="data.socialLink">
-                <img class="logo" :src="data.logoURL" alt="IMG tag">
-            </a>
             <img class="background" :src="data.imageURL">
             <h1 v-once>{{ data.name }}</h1>
             <hr>
@@ -48,20 +51,12 @@ watchEffect(async () => {
                 <Icon name="carbon:thumbs-up" />
                 <span>{{ $t("req_false") }}</span>
             </p>
-            <a name="torrent-link" :href="data.downloadURL" target="_blank">
-                <button v-if="data.downloadURL.startsWith('magnet:')">
-                    <div>
-                        <Icon name="fluent-emoji-flat:magnet" />
-                        <span>{{ $t("download_torrent") }}</span>
-                    </div>
-                </button>
-            </a>
         </div>
-    </section>
+    </div>
 </template>
 
 <style lang="scss">
-#mod-details {
+.__mod-details {
     margin: 0.75rem;
     width: calc(100% - 1.5rem);
     display: flex;
@@ -96,7 +91,7 @@ watchEffect(async () => {
     span {
         margin-left: 0.5rem;
     }
-    
+
     .logo {
         width: 5rem;
         aspect-ratio: 1;
@@ -121,6 +116,7 @@ watchEffect(async () => {
         border-radius: 8px;
         padding: 1px;
         margin-top: 1rem;
+
         div {
             padding: 0.5rem 1.5rem;
             background-color: rgb(10, 10, 10);

@@ -50,8 +50,7 @@ const steps: step[] = [
 </script>
 
 <template>
-    <div id="roadmap" ref="container" :style="{ backgroundPosition: `${scroll.px / 100}%` }">
-        <div class="shadow"></div>
+    <div id="roadmap" class="__roadmap" ref="container" :style="{ backgroundPosition: `${scroll.px / 100}%` }">
         <h1 class="hero" :text="$t('rm_hero')">{{ $t("rm_hero") }}</h1>
         <div class="line" :style="{ height: `${scroll.px + 100}px` }"></div>
         <div class="indicator" :style="{ opacity: 1 - (scroll.px / 50) }">
@@ -72,31 +71,17 @@ const steps: step[] = [
     align-items: center;
     position: relative;
     gap: 5rem;
-    background-color: rgb(10, 10, 10);
-    ;
-    background-image: radial-gradient(rgba(255, 255, 255, 0.25) 0.6px, rgba(0, 0, 0, 0) 0.5px);
-    background-size: 20px 20px;
     padding-bottom: 50vh;
+	pointer-events: none;
 
     >* {
+		pointer-events: all;
         user-select: none;
     }
 
     &::-webkit-scrollbar {
         display: none;
     }
-}
-
-.shadow {
-    position: fixed;
-    width: 100%;
-    height: calc(100vh - 5.5rem);
-    bottom: 0;
-    left: 0;
-    box-shadow: 0 0 2rem 5rem rgb(10, 10, 10) inset;
-    pointer-events: none;
-    scale: 1 1.02;
-    z-index: 2;
 }
 
 .hero {

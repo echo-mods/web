@@ -1,135 +1,175 @@
 <script setup lang="ts">
-const { locale } = useI18n()
-const route = useRoute()
-
-const useUser = useState("state", (): any => {
-    return {
-        name: {
-            first: "Andrei",
-            last: "Hudalla"
-        }
-    }
-})
+const { locale } = useI18n();
+const route = useRoute();
 
 const links = [
     {
         text: "Home",
         ru_text: "Домашняя",
-        route: "/"
+        route: "/",
     },
     {
         text: "News",
         ru_text: "Новости",
-        route: "/news"
+        route: "/news",
     },
     {
         text: "Roadmap",
         ru_text: "Планы",
-        route: "/roadmap"
+        route: "/roadmap",
     },
     {
         text: "Explore",
         ru_text: "Моды",
-        route: "/explore"
-    }
-]
+        route: "/explore",
+    },
+];
 
-const SessionCookie = useCookie("SESSION_KEY")
+let dashboard_text = ref("");
+let login_text = ref("");
+let logout_text = ref("");
 
-let dashboard_text = ref("")
-let login_text = ref("")
-let logout_text = ref("")
+let option_b = ref();
 
-let option_b = ref()
+const profile_menu = ref();
+const toast = useToast();
 
-const profile_menu = ref()
+const user = useSupabaseUser();
+const { auth } = useSupabaseClient();
 
 watchEffect(() => {
-    dashboard_text.value = locale.value === "en" ? "Dashboard" : "Личный кабинет"
-    login_text.value = locale.value === "en" ? "Log in" : "Войти"
-    logout_text.value = locale.value === "en" ? "Log out" : "Выйти"
-    option_b.value = !SessionCookie.value ? {
-        label: login_text,
-        icon: "i-heroicons-arrow-right-on-rectangle",
-        to: "/login"
-    } : {
-        label: logout_text,
-        icon: "i-heroicons-arrow-right-on-rectangle",
-        click: () => {
-            SessionCookie.value = undefined
-            window.location.reload()
-        }
-    }
+    dashboard_text.value =
+        locale.value === "en" ? "Dashboard" : "Личный кабинет";
+    login_text.value = locale.value === "en" ? "Log in" : "Войти";
+    logout_text.value = locale.value === "en" ? "Log out" : "Выйти";
+    option_b.value = !user.value
+        ? {
+              label: login_text,
+              icon: "i-heroicons-arrow-left-on-rectangle",
+              to: "/auth/login",
+          }
+        : {
+              label: logout_text,
+              icon: "i-heroicons-arrow-right-on-rectangle",
+              click: async () => {
+                  await auth.signOut();
+                  toast.add({
+                      title: locale.value === "en" ? "Logged out" : "Вы успешно вышли",
+                  });
+              },
+          };
     profile_menu.value = [
         [
             {
-                label: dashboard_text.value,
-                to: "/dashboard"
-            }
+                label: user.value
+                    ? locale.value === "en"
+                        ? "You are logged in:"
+                        : "Вы авторизованы:"
+                    : locale.value === "en"
+                    ? "You are not logged in"
+                    : "Вы не авторизованы",
+                slot: "account",
+                disabled: true,
+            },
         ],
         [
-            option_b.value
-        ]
-    ]
-})
-// !!!
-const show_profile_dropdown = true
+            {
+                label: dashboard_text.value,
+                to: "/dashboard",
+            },
+        ],
+        [option_b.value],
+    ];
+});
+const show_profile_dropdown = true;
 
-
-const animating = useState("translation-animating")
-const animating_to_lang: Ref<string> = useState("translation-animating-target")
+const animating = useState("translation-animating");
+const animating_to_lang: Ref<string> = useState("translation-animating-target");
 
 watchEffect(() => {
     if (animating.value === true) {
         setTimeout(() => {
-            animating.value = false
-        }, 1000);
+            animating.value = false;
+        }, 1500);
     }
-})
+});
 </script>
 
 <template>
     <header>
         <NuxtLink to="/" class="home">
-            <img class="primary" src="/logo.png">
-            <img class="shadow" src="/logo.png">
-            <img class="shadow" src="/logo.png">
-            <img class="shadow" src="/logo.png">
-            <img class="shadow" src="/logo.png">
+            <img class="primary" src="/logo.png" />
+            <img class="shadow" src="/logo.png" />
+            <img class="shadow" src="/logo.png" />
+            <img class="shadow" src="/logo.png" />
+            <img class="shadow" src="/logo.png" />
         </NuxtLink>
         <div class="links">
             <NuxtLink v-for="link in links" :to="link.route">
-                <span :class="{ current: route.fullPath === link.route }">{{ locale === "en" ? link.text : link.ru_text
+                <span :class="{ current: route.path === link.route }">{{
+                    locale === "en" ? link.text : link.ru_text
                 }}</span>
             </NuxtLink>
         </div>
         <div class="right">
-            <a class="download_btn" target="_blank">
+            <a download="" class="download_btn" href="/" target="_blank">
                 <UButton>{{ $t("call_to_download") }}</UButton>
             </a>
-            <div class="divider"></div>
+            <div class="divider" />
             <LangSwitcher />
-            <UDropdown v-if="show_profile_dropdown" :items="profile_menu" :popper="{ placement: 'bottom-start' }">
-                <div class="profile-btn">
-                    <UAvatar v-if="useUser !== undefined && typeof useUser === 'object' && useUser['name']"
-                        :alt="`${useUser.name.first} ${useUser.name.last}`" />
-                    <UIcon v-else name="i-heroicons-user-20-solid" />
-                </div>
+            <div class="divider" />
+            <UDropdown
+                v-if="show_profile_dropdown"
+                :items="profile_menu"
+                :popper="{ placement: 'bottom-start' }"
+            >
+                <UAvatar
+                    icon="i-heroicons-user-20-solid"
+                    :style="{
+                        border: user
+                            ? `unset`
+                            : `1px solid rgba(255, 255, 255, 0.5)`,
+                    }"
+                    :src="user ? user.user_metadata.avatar_url : undefined"
+                />
+                <template #account="{ item }">
+                    <div class="text-left">
+                        <p v-if="!user">
+                            {{ item.label }}
+                        </p>
+                        <p
+                            class="w-44 text-xs text-ellipsis overflow-hidden whitespace-nowrap font-medium text-gray-900 dark:text-white"
+                        >
+                            {{ user?.user_metadata.user_name }}
+                        </p>
+                    </div>
+                </template>
             </UDropdown>
         </div>
     </header>
     <ClientOnly>
-        <div v-if="!(route.path.startsWith('/news/ru') || route.path.startsWith('/news/en'))" class="translation-effect"
-            :class="{ slide: animating }"></div>
+        <div
+            v-if="
+                !(
+                    route.path.startsWith('/news/ru') ||
+                    route.path.startsWith('/news/en')
+                )
+            "
+            class="translation-effect"
+            :class="{ slide: animating }"
+        ></div>
         <TransitionGroup name="lang_indicator">
-            <div class="target ru" v-if="animating_to_lang === 'ru' && animating">
+            <div
+                class="target ru"
+                v-if="animating_to_lang === 'ru' && animating"
+            >
                 <Icon name="circle-flags:us" />
-                <Icon name="line-md:arrow-left" style="rotate: 180deg;" />
+                <Icon name="line-md:arrow-left" style="rotate: 180deg" />
                 <Icon name="circle-flags:ru" />
             </div>
             <div class="target en" v-else-if="animating">
                 <Icon name="circle-flags:ru" />
-                <Icon name="line-md:arrow-left" style="rotate: 180deg;" />
+                <Icon name="line-md:arrow-left" style="rotate: 180deg" />
                 <Icon name="circle-flags:us" />
             </div>
         </TransitionGroup>
@@ -137,22 +177,31 @@ watchEffect(() => {
 </template>
 
 <style scoped lang="scss">
+@keyframes slide {
+    33% {
+        width: 100%;
+        left: 0;
+    }
+    100% {
+        width: 0;
+        left: 100%;
+    }
+}
+
 .translation-effect {
     position: absolute;
     left: -100%;
     top: 0;
     height: 100%;
     width: 100%;
-    background-color: rgba(15, 15, 15, 0.5);
+    background-color: rgba(15, 15, 15, 0.1);
     backdrop-filter: blur(3rem);
     transition: none;
     z-index: 100;
 
     &.slide {
-        left: 100%;
-        transition: all 1s ease-in-out;
+        animation: slide 1.5s ease-in-out;
     }
-
 }
 
 .target {
@@ -165,17 +214,16 @@ watchEffect(() => {
     gap: 1rem;
     z-index: 101;
     border-radius: 0.5rem;
-    background-color: rgba(255,255,255,0.1);
+    background-color: rgba(255, 255, 255, 0.1);
     padding: 0.8rem;
-    border: 2px solid rgba(255,255,255,0.3);
+    border: 2px solid rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(1px);
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.8);
 
-    >svg {
+    > svg {
         font-size: 1.5rem;
     }
 }
-
 
 header {
     height: 4rem;
@@ -305,16 +353,6 @@ header {
     }
 }
 
-.profile-btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-width: 2rem;
-    aspect-ratio: 1 !important;
-    border-radius: 5rem;
-    border: 1px rgba(255, 255, 255, 0.3) solid;
-}
-
 .lang_indicator-enter-active,
 .lang_indicator-leave-active {
     transition: all 0.5s;
@@ -327,8 +365,7 @@ header {
 }
 
 @media (max-width: 850px) {
-
-    .right>.divider,
+    .right > .divider,
     .download_btn {
         display: none;
     }
@@ -338,4 +375,5 @@ header {
     .links {
         display: none;
     }
-}</style>
+}
+</style>

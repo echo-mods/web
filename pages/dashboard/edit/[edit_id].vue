@@ -38,13 +38,13 @@ const fields = [
 </script>
     
 <template>
-    <section id="edit-mod">
+    <div class="__edit-mod" id="edit-mod">
         <h1>{{ $t("make_changes") }}</h1>
         <UFormGroup v-for="field in fields" :label="locale === 'en' ? field.label : field.ru_label" :description="locale === 'en' ? field.description : field.ru_description">
             <UInput :icon="field.icon" v-model="form[field.index]"/>
         </UFormGroup>
         <UButton color="white" :disabled="!changed">{{ $t("save_changes") }}</UButton>
-    </section>
+    </div>
 </template>
 
 <style scoped lang="scss">

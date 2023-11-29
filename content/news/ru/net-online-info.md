@@ -1,5 +1,5 @@
 ---
-homepage_image: "https://i.ibb.co/CWGByKc/ip-Ef-Fs-UZFp-A.jpg"
+homepage_image:  "https://i.ibb.co/CWGByKc/ip-Ef-Fs-UZFp-A.jpg"
 homepage_image_filters: "brightness(0.4)"
 homepage_subtitle: "Отчёт о разработке"
 topic: "«NET ONLINE»"

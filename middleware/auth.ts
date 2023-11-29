@@ -1,15 +1,6 @@
-export default defineNuxtRouteMiddleware(async () => {
-    return navigateTo("/login")
-    // ^^^ Temporary ^^^
-    
-    const { api_endpoint } = useAppConfig();
-    const SessionCookie = useCookie("SESSION_KEY");
-    const { data } = await useFetch(`${api_endpoint}validate`, {
-        query: {
-            session: SessionCookie.value,
-        },
-    });
-    if (!data.value || !data.value.valid) {
-        return navigateTo("/login");
+export default defineNuxtRouteMiddleware(async (to, from) => {
+	const user = useSupabaseUser()
+    if (!user.value) {
+        return navigateTo({path: "/auth/login", query: {redirect_to: to.fullPath}});
     }
 });

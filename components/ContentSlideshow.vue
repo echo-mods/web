@@ -1,4 +1,5 @@
 <script setup lang="ts">
+
 const root = ref()
 const enabled = ref()
 const controls = ref()
@@ -7,10 +8,13 @@ const controlsDefaultWidth = ref(0)
 const btn_left = ref()
 const btn_right = ref()
 
-const fullscreen = ref(false)
+const props = defineProps<{
+	content: string[],
+	startingIndex?: number,
+	isGlobalHandler?: boolean
+}>()
 
-const slideID = ref(0)
-const props = defineProps(["content"])
+const slideID = ref(props.startingIndex || 0)
 
 const cooldown = ref(false)
 
@@ -61,7 +65,9 @@ const handleKeypress = (event: any) => {
 }
 
 const updateHoverState = () => {
-	enabled.value = root.value.matches(":hover")
+	if (root.value) {
+		enabled.value = root.value.matches(":hover")
+	}
 }
 
 
@@ -87,12 +93,20 @@ onMounted(() => {
 onUnmounted(() => {
 	window.removeEventListener("keydown", handleKeypress)
 })
+
+const fs_state = useState<boolean>("fs_content_state", () => false)
+const fs_content = useState<string[]>("fs_content_content", () => [])
+const fs_index = useState<number>("fs_content_index", () => 0)
 </script>
 
 <template>
-	<ClientOnly>
-		<div class="content-container" ref="root">
-			<button class="fullscreen"><Icon name="ic:baseline-fullscreen-exit"/></button>
+		<div class="content-container" ref="root" :class="{ fullscreen: isGlobalHandler }">
+			<button v-if="!isGlobalHandler" class="fullscreen-btn" @click="fs_state = true; fs_content = props.content; fs_index = slideID">
+				<Icon name="ic:baseline-fullscreen-exit" />
+			</button>
+			<button v-if="isGlobalHandler" class="close-btn" @click="fs_state = false">
+				<Icon name="mdi:close" />
+			</button>
 			<!-- Slidshow controls -->
 			<div class="slideshow-controls" ref="controls" :style="{ width: controlsCurrentWidth }"
 				v-if="content.length > 1">
@@ -113,8 +127,8 @@ onUnmounted(() => {
 			</div>
 			<!-- Content placeholders -->
 			<TransitionGroup :name="transitionName">
-				<img v-if="data && (data.endsWith('webp') || data.endsWith('png') || data.endsWith('jpg'))" :src="data"
-					:key="slideID">
+				<img loading="lazy" v-if="data && (data.endsWith('webp') || data.endsWith('png') || data.endsWith('jpg'))"
+					:src="data" :key="slideID">
 				<video v-else-if="data && data.endsWith('mp4')" :src="data" :key="slideID + 2"></video>
 				<iframe v-else :key="slideID + 3"
 					:src="`https://www.youtube-nocookie.com/embed/${data}?modestbranding=true`" title="YouTube video player"
@@ -123,10 +137,6 @@ onUnmounted(() => {
 					allowfullscreen></iframe>
 			</TransitionGroup>
 		</div>
-		<template #fallback>
-			<div class="content-container"></div>
-		</template>
-	</ClientOnly>
 </template>
 
 <style scoped lang="scss">
@@ -138,16 +148,60 @@ onUnmounted(() => {
 	overflow: hidden;
 	position: relative;
 
-	.fullscreen {
+	&.fullscreen {
+		background-color: black;
+		position: fixed !important;
+		z-index: 100;
+		max-width: 90%;
+		max-height: 90%;
+		width: fit-content;
+		height: min-content;
+		left: 50%;
+		top: 50%;
+		translate: -50% -50%;
+		box-shadow: 0 0 0 100rem rgba(0,0,0,0.8) !important;
+		
+		>iframe,
+		>img:not(.ambient-img),
+		>video {
+			width: 100%;
+			height: 100%;
+			aspect-ratio: 16 / 9 !important;
+			object-fit: contain;
+		}
+	}
+
+	&.fallback {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.close-btn {
+		right: 1rem;
+		left: unset !important;
+	}
+	.fullscreen-btn, .close-btn {
 		position: absolute;
-		background-color: rgba(255,255,255,0.1);
+		background-color: rgba(0, 0, 0, 0.1);
 		backdrop-filter: blur(1rem);
-		padding: 0.25rem;
 		border-radius: 0.1rem;
 		font-size: 2rem;
-		width: 3rem;
-		height: 3rem;
-		> svg {
+		padding: 0.1rem;
+		left: 1rem;
+		top: 1rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border-radius: 0.5rem;
+		outline: 1px solid rgba(255, 255, 255, 0.3);
+		transition: all 0.3s;
+
+		&:hover {
+
+			background-color: rgba(0, 0, 0, 0.3);
+		}
+
+		>svg {
 			margin: 0;
 		}
 	}
@@ -159,7 +213,6 @@ onUnmounted(() => {
 		height: 100%;
 		object-fit: cover;
 	}
-
 	.slideshow-controls {
 		translate: 0 150%;
 		position: absolute;

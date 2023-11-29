@@ -13,6 +13,7 @@ const animateLocale = (locale: "en" | "ru") => {
     if (!route.path.startsWith(`/news/${locale_g.value}`)) {
         animating.value = true
         setTimeout(() => {
+            setLocale(locale)
             locale_g.value = locale
         }, 500);
     } else {

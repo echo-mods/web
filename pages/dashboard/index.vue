@@ -23,7 +23,7 @@ const mods: any = []
 </script>
 
 <template>
-    <section id="dashboard">
+    <div id="dashboard" class="__dashboard">
         <h5 class="section-heading">{{ $t("lk_actions") }}</h5>
         <div class="actions">
             <UTooltip :text="$t('mod_upload_info')">
@@ -41,7 +41,7 @@ const mods: any = []
                 </NuxtLink>
             </div>
         </div>
-    </section>
+    </div>
 </template>
 
 <style scoped lang="scss">
