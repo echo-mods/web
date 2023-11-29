@@ -24,8 +24,8 @@ const providers: {
         key: "github",
     },
     {
-        icon: "bxl:google",
-        key: "google",
+        icon: "bxl:twitch",
+        key: "twitch",
     },
     {
         icon: "bxl:discord-alt",

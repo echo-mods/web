@@ -35,7 +35,7 @@ const authenticate = async () => {
     if (user.value)
         toast.add({
             title: `${locale.value === "en" ? "Welcome" : "Добро пожаловать"} ${
-                user.value.user_metadata.user_name
+                useUsername(user.value)
             }!`,
         });
     router.push((redirect as string | undefined) || "/");

@@ -2,7 +2,7 @@
 import { useMediaQuery } from "@vueuse/core";
 const { locale } = useI18n();
 const route = useRoute();
-const router = useRouter()
+const router = useRouter();
 
 const links = [
     {
@@ -27,7 +27,7 @@ const links = [
     },
 ];
 
-let account_text = ref("");
+let profile_text = ref("");
 let login_text = ref("");
 let logout_text = ref("");
 
@@ -40,8 +40,7 @@ const user = useSupabaseUser();
 const { auth } = useSupabaseClient();
 
 watchEffect(() => {
-    account_text.value =
-        locale.value === "en" ? "My account" : "Личный кабинет";
+    profile_text.value = locale.value === "en" ? "Profile" : "Профиль";
     login_text.value = locale.value === "en" ? "Log in" : "Войти";
     logout_text.value = locale.value === "en" ? "Log out" : "Выйти";
     option_b.value = !user.value
@@ -77,14 +76,16 @@ watchEffect(() => {
                 disabled: true,
             },
         ],
-        [
-            {
-                label: account_text.value,
-                to: "/account",
-            },
-        ],
-        [option_b.value],
     ];
+	if (user.value) {
+		profile_menu.value.push([
+			{
+				label: profile_text,
+				to: `/profile/${useUsername(user.value)}`,
+			},
+		]);
+	}
+    profile_menu.value.push([option_b.value]);
 });
 const show_profile_dropdown = true;
 
@@ -94,18 +95,21 @@ const animating_to_lang: Ref<string> = useState("translation-animating-target");
 watchEffect(() => {
     if (animating.value === true) {
         setTimeout(() => {
+            mhOpen.value = false;
+        }, 500);
+        setTimeout(() => {
             animating.value = false;
         }, 1500);
     }
 });
-const isMobile = process.client ? useMediaQuery("(max-width: 750px)") : ref(true);
+const isMobile = process.client ? useMediaQuery("(max-width: 750px)") : true;
 const mhOpen = useState("mobile_header_open", () => false);
 
-router.afterEach(() => mhOpen.value = false)
+router.afterEach(() => (mhOpen.value = false));
 </script>
 
 <template>
-	<header v-if="isMobile" style="opacity: 0;"></header>
+    <header class="fake-header"></header>
     <Transition name="mobile-header">
         <header v-show="isMobile && mhOpen" class="__global-mobile-header">
             <div class="links">
@@ -144,7 +148,7 @@ router.afterEach(() => mhOpen.value = false)
                             <p
                                 class="w-44 text-xs text-ellipsis overflow-hidden whitespace-nowrap font-medium text-gray-900 dark:text-white"
                             >
-                                {{ user?.user_metadata.user_name }}
+                                {{ useUsername(user) }}
                             </p>
                         </div>
                     </template>
@@ -160,50 +164,50 @@ router.afterEach(() => mhOpen.value = false)
             <img class="shadow" src="/logo.png" />
             <img class="shadow" src="/logo.png" />
         </NuxtLink>
-		<template v-if="!isMobile">
-			<div class="links">
-				<NuxtLink v-for="link in links" :to="link.route">
-					<span :class="{ current: route.path === link.route }">{{
-						locale === "en" ? link.text : link.ru_text
-					}}</span>
-				</NuxtLink>
-			</div>
-			<div class="right">
-				<a download="" class="download_btn" href="/" target="_blank">
-					<UButton>{{ $t("call_to_download") }}</UButton>
-				</a>
-				<div class="divider" />
-				<LangSwitcher />
-				<div class="divider" />
-				<UDropdown
-					v-if="show_profile_dropdown"
-					:items="profile_menu"
-					:popper="{ placement: 'bottom-start' }"
-				>
-					<UAvatar
-						icon="i-heroicons-user-20-solid"
-						:style="{
-							border: user
-								? `unset`
-								: `1px solid rgba(255, 255, 255, 0.5)`,
-						}"
-						:src="user ? user.user_metadata.avatar_url : undefined"
-					/>
-					<template #account="{ item }">
-						<div class="text-left">
-							<p v-if="!user">
-								{{ item.label }}
-							</p>
-							<p
-								class="w-44 text-xs text-ellipsis overflow-hidden whitespace-nowrap font-medium text-gray-900 dark:text-white"
-							>
-								{{ user?.user_metadata.user_name }}
-							</p>
-						</div>
-					</template>
-				</UDropdown>
-			</div>
-		</template>
+        <template v-if="!isMobile">
+            <div class="links">
+                <NuxtLink v-for="link in links" :to="link.route">
+                    <span :class="{ current: route.path === link.route }">{{
+                        locale === "en" ? link.text : link.ru_text
+                    }}</span>
+                </NuxtLink>
+            </div>
+            <div class="right">
+                <a download="" class="download_btn" href="/" target="_blank">
+                    <UButton>{{ $t("call_to_download") }}</UButton>
+                </a>
+                <div class="divider" />
+                <LangSwitcher />
+                <div class="divider" />
+                <UDropdown
+                    v-if="show_profile_dropdown"
+                    :items="profile_menu"
+                    :popper="{ placement: 'bottom-start' }"
+                >
+                    <UAvatar
+                        icon="i-heroicons-user-20-solid"
+                        :style="{
+                            border: user
+                                ? `unset`
+                                : `1px solid rgba(255, 255, 255, 0.5)`,
+                        }"
+                        :src="user ? user.user_metadata.avatar_url : undefined"
+                    />
+                    <template #account="{ item }">
+                        <div class="text-left">
+                            <p v-if="!user">
+                                {{ item.label }}
+                            </p>
+                            <p
+                                class="w-44 text-xs text-ellipsis overflow-hidden whitespace-nowrap font-medium text-gray-900 dark:text-white"
+                            >
+                                {{ useUsername(user) }}
+                            </p>
+                        </div>
+                    </template>
+                </UDropdown>
+            </div>
+        </template>
         <UButton
             icon="i-heroicons-bars-4-20-solid"
             variant="link"
@@ -293,16 +297,16 @@ router.afterEach(() => mhOpen.value = false)
 
 .__global-mobile-header {
     position: fixed;
-    backdrop-filter: blur(1rem) brightness(0.5);
     inset: 0;
     height: unset;
     flex-direction: column;
+    border-top: none;
     gap: 1rem;
     padding: 1rem 2rem;
     padding-top: 5rem;
-	z-index: 2 !important;
+    z-index: 2 !important;
     .links {
-		margin-top: auto;
+        margin-top: auto;
         flex-direction: column;
         align-items: center;
     }
@@ -322,20 +326,18 @@ header {
     height: 4rem;
     margin: 0.75rem;
     background-color: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(1px);
+    backdrop-filter: blur(1rem) brightness(0.5);
     border-radius: 8px;
     border: 1px rgba(255, 255, 255, 0.3) solid;
     box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.8);
     padding: 0 1rem;
     display: flex;
     align-items: center;
-
-	&.mobile {
-		z-index: 3;
-		position: fixed;
-		inset: 0;
-		bottom: unset;
-	}
+    //
+    z-index: 3;
+    position: fixed;
+    inset: 0;
+    bottom: unset;
 
     .home {
         position: relative;
@@ -474,5 +476,10 @@ header {
 .mobile-header-leave-to {
     opacity: 0;
     scale: 0.9;
+}
+
+.fake-header {
+    position: unset;
+    opacity: 0;
 }
 </style>
