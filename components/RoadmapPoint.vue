@@ -88,18 +88,17 @@ onMounted(() => {
 }
 
 @media only screen and (max-width: 600px) {
-	.container {
-	}
     .dot {
-        left: calc(20vw + 0.2rem) !important;
+        left: calc(12vw + 0.2rem) !important;
     }
     .connector {
         translate: 0 0 !important;
+		width: 8vw !important;
     }
     .info {
-		max-width: 60vw;
+		max-width: 75vw;
         position: absolute;
-        left: 20vw;
+        left: 4vw;
         translate: 4rem -50% !important;
     }
 }

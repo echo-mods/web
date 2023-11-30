@@ -58,7 +58,7 @@ const steps = computed<step[]>(() => {
               {
                   title: "1.0 release",
 				  description: "Advanced functionality - To be determined by user feedback",
-                  icon: "mdi:beta",
+                  icon: "noto-v1:fireworks",
                   date: "~Q4 2024",
               },
           ]
@@ -80,7 +80,7 @@ const steps = computed<step[]>(() => {
               {
                   title: "Релиз 1.0",
 				  description: "Сложная функционал - будет определён запросами пользователей",
-                  icon: "mdi:beta",
+                  icon: "noto-v1:fireworks",
                   date: "~IV кв. 2024",
               },
           ];
@@ -283,7 +283,7 @@ const finalCard = computed(() => {
     }
     .line {
         transition: all 0.1s;
-        left: 20vw;
+        left: 12vw;
     }
 
     .end {
