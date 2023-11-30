@@ -28,6 +28,7 @@ if (!mod.value) {
     });
 }
 
+
 const setHead = (name?: string) => {
     useHead({
         title: name,
