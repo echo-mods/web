@@ -14,7 +14,7 @@ export default defineNuxtConfig({
     routeRules: {
         "/mods": {
             redirect: "/explore"
-        }
+        },
     },
 	supabase: {
 		redirect: false

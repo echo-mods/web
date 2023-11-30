@@ -124,13 +124,23 @@ watch(locale, refreshSlides)
                 </div>
             </div>
         </section>
+		<hr style="width: 90%; opacity: 0.2;">
+		<About />
     </div>
 </template>
 
 <style lang="scss">
 // В данном случае SCSS код для стилизации
 
+.__home {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 2rem;
+}
+
 #hero-container {
+	position: relative;
     margin: 0 5%;
     width: calc(90%);
     border-radius: 1rem;

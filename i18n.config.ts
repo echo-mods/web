@@ -36,7 +36,7 @@ export default defineI18nConfig(() => ({
             rm_hero: "Планы",
 			username_word: "Имя пользователя",
 			conf_sent_title: "Мы выслали письмо-подтверждение вам на почту",
-			conf_sent_text: "Если не видите письмо, проверте папку 'спам'."
+			conf_sent_text: "Если не видите письмо, проверте папку 'спам'.",
         },
         en: {
             "null": "",

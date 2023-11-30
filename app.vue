@@ -64,11 +64,6 @@ body {
     background: #171717 !important;
 }
 
-section {
-    position: absolute;
-    z-index: -100;
-}
-
 section h1,
 h2,
 h3,
@@ -124,9 +119,5 @@ button {
 .page-left-leave-to {
     opacity: 0;
     transform: translateX(10%);
-}
-
-#file_upload {
-    display: none;
 }
 </style>
