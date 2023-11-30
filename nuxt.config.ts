@@ -1,15 +1,16 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     css: ["~/assets/css/tailwind.css"],
-    devtools: { enabled: false },
+    devtools: { enabled: true },
     modules: [
+		"@nuxtjs/mdc",
         "@nuxtjs/robots",
         "@nuxtjs/i18n",
         "@nuxt/ui",
         "nuxt-icon",
         "@nuxt/content",
         "nuxt-gtag",
-        "@nuxtjs/supabase"
+        "@nuxtjs/supabase",
     ],
     routeRules: {
         "/mods": {

@@ -1,56 +1,141 @@
 <script setup lang="ts">
-import { _AsyncData } from 'nuxt/dist/app/composables/asyncData';
-import { Mod } from 'types/database';
+import { Platforms } from "@/composables/useDatabase";
+import type { Mod, ModBuild } from "~/types/database";
+import type { RealtimePostgresChangesPayload } from "@supabase/supabase-js";
 
-definePageMeta({
-    validate: async (route) => {
-        const { api_endpoint } = useAppConfig()
-        const { data } = await useFetch(`${api_endpoint}mods/${route.params.id}`)
-
-        return data.value !== null && data.value !== undefined
-    }
-})
-
+const supabase = useSupabaseClient();
 
 // Page setup finished
-const route = useRoute()
-const { api_endpoint } = useAppConfig()
-const res = await useFetch(`${api_endpoint}mods/${route.params.id}`)
-const { data } = res as _AsyncData<Mod, null>
+const route = useRoute();
+const {
+    params: { id },
+} = route;
+const mod_id = parseInt(id as string);
 
-watchEffect(async () => {
+const { data } = await supabase
+    .from("mods")
+    .select("*, mod-builds(*)")
+    .eq("mod_id", id)
+    .single();
+
+const mod = ref(data as unknown as Mod);
+
+if (!mod.value) {
+    throw createError({
+        statusCode: 404,
+        message: "Мод не существует",
+        fatal: true,
+    });
+}
+
+const setHead = (name?: string) => {
     useHead({
-        title: data.value.name,
-        titleTemplate: '%s | EchoMods',
-    })
-})
+        title: name,
+        titleTemplate: "%s | EchoMods",
+    });
+};
+
+const handle_postgres_changes = (
+    payload: RealtimePostgresChangesPayload<{ [key: string]: any }>
+) => {
+    if (payload.table === "mods") {
+        if (payload.eventType === "UPDATE") {
+            const updatedArticle = payload.new as Mod;
+            const updatedID = updatedArticle.mod_id;
+            if (updatedID === mod_id) {
+            }
+        }
+    } else if (payload.table === "mod-builds") {
+        const build = payload.new
+            ? (payload.new as ModBuild)
+            : (payload.old as ModBuild);
+        switch (payload.eventType) {
+            case "INSERT":
+                if (build.mod_id === mod_id) {
+                    mod.value["mod-builds"]?.push(build);
+                }
+                break;
+            case "UPDATE":
+                mod.value["mod-builds"].forEach(
+                    (build_checking: ModBuild, index: number) => {
+                        if (build_checking.mod_id === mod_id) {
+                            mod.value["mod-builds"][index] = build;
+                        }
+                    }
+                );
+                break;
+            case "DELETE":
+                mod.value["mod-builds"].forEach(
+                    (build_checking: ModBuild, index: number) => {
+                        if (build_checking.mod_id === mod_id) {
+                            mod.value["mod-builds"].splice(index, 1);
+                        }
+                    }
+                );
+                break;
+        }
+    }
+};
+
+const listener = supabase
+    .channel("custom-all-channel")
+    .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "mods" },
+        handle_postgres_changes
+    )
+    .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "mod-builds" },
+        handle_postgres_changes
+    )
+    .subscribe();
+
+watchEffect(() => {
+    setHead(mod.value.name);
+});
 </script>
 
 <template>
     <div class="__mod-details">
-        <ContentSlideshow :content="data.content" />
-        <div class="data-container">
-            <img class="background" :src="data.imageURL">
-            <h1 v-once>{{ data.name }}</h1>
-            <hr>
-            <p v-once>{{ data.description }}</p>
-            <hr>
-            <p>
-                <Icon name="streamline:interface-favorite-star-reward-rating-rate-social-star-media-favorite-like-stars" />
-                <span>{{ data.rating }} / 10</span>
-            </p>
-            <p>
-                <Icon name="iconoir:radiation" />
-                <span>{{ data.platform }}</span>
-            </p>
-            <p v-if="data.standalone === false">
-                <Icon name="mdi:exclamation" />
-                <span>{{ $t("req_true") }}</span>
-            </p>
-            <p v-else>
-                <Icon name="carbon:thumbs-up" />
-                <span>{{ $t("req_false") }}</span>
-            </p>
+        <div class="main-info">
+            <ContentSlideshow :content="mod.content_urls || []" />
+            <div class="data-container">
+                <img class="background" :src="mod.thumbnail_url" />
+                <h1 v-once>{{ mod.name }}</h1>
+                <hr />
+                <p v-once>{{ mod.description }}</p>
+                <hr />
+                <!-- <p> Ratings will be added later
+                <Icon
+                    name="streamline:interface-favorite-star-reward-rating-rate-social-star-media-favorite-like-stars"
+                />
+                <span>{{ 5 }} / 10</span>
+            </p> -->
+                <p>
+                    <Icon name="iconoir:radiation" />
+                    <span>{{ Platforms[mod.platform] }}</span>
+                </p>
+                <p v-if="!mod.standalone">
+                    <Icon name="mdi:exclamation" />
+                    <span>{{ $t("req_true") }}</span>
+                </p>
+                <p v-else>
+                    <Icon name="carbon:thumbs-up" />
+                    <span>{{ $t("req_false") }}</span>
+                </p>
+            </div>
+        </div>
+        <div class="builds">
+            <div class="build" v-for="build in mod['mod-builds']">
+				<MarkdownForamatter>
+					<div>
+						<h1>{{ build.version.startsWith("v") ? "" : "v" }}{{ build.version }}</h1>
+						<hr>
+					</div>
+					<Mdc :value="build.changes" tag="div"/>
+				</MarkdownForamatter>
+            </div>
         </div>
     </div>
 </template>
@@ -59,9 +144,11 @@ watchEffect(async () => {
 .__mod-details {
     margin: 0.75rem;
     width: calc(100% - 1.5rem);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
+    .main-info {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
 }
 
 .data-container {
@@ -124,12 +211,32 @@ watchEffect(async () => {
             transition: all 0.3s;
         }
 
-        background: linear-gradient(55deg, rgba(30, 255, 0, 1) 0%, rgba(0, 212, 255, 1) 100%);
+        background: linear-gradient(
+            55deg,
+            rgb(255, 81, 0) 0%,
+            rgb(255, 136, 0) 100%
+        );
     }
 
     button:hover {
-        background: linear-gradient(-30deg, rgba(30, 255, 0, 1) 0%, rgba(0, 212, 255, 1) 100%);
+        background: linear-gradient(
+            -30deg,
+            rgb(255, 81, 0) 0%,
+            rgb(255, 136, 0) 100%
+        );
     }
+}
+
+.builds {
+	padding: 1rem 0;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	.build {
+		padding: 1rem;
+		border-radius: 0.5rem;
+		border: 1px solid rgb(var(--color-primary-500) / 0.9);
+	}
 }
 
 @media (max-width: 600px) {

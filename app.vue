@@ -10,11 +10,11 @@ watchEffect(() => {
     useHeadSafe({
         title: locale.value === "en" ? `${route.meta.name}` : `${route.meta.ru_name}`,
         titleTemplate: (titleChunk) => {
-            if (titleChunk === "undefined" && currentNewsArticleTitle.value !== undefined) { return `${currentNewsArticleTitle.value} | EchoMods` }
-            return titleChunk ? `${titleChunk} | EchoMods` : 'EchoMods';
+			const defined = titleChunk !== "undefined" && titleChunk !== undefined
+            if (!defined && currentNewsArticleTitle.value !== undefined) { return `${currentNewsArticleTitle.value} | EchoMods` }
+            return defined ? `${titleChunk} | EchoMods` : 'EchoMods';
         }
     })
-    console.log(locale.value === "en" ? `${route.meta.name}` : `${route.meta.ru_name}`)
 })
 
 

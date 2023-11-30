@@ -66,7 +66,7 @@ const steps = computed<step[]>(() => {
               // Russian
               {
                   title: "Демонстрация",
-				  description: "Демонастрация сайта и программы на ПК",
+				  description: "Демонстрация сайта и программы на ПК",
                   icon: "clarity:application-solid",
                   date: "IV кв. 2023",
 				  compete: true
