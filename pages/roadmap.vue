@@ -43,33 +43,45 @@ const steps = computed<step[]>(() => {
         ? [
               // English
               {
-                  title: "Hello",
-                  icon: "material-symbols:waving-hand-sharp",
-                  date: "September 1, 2023",
+                  title: "Demo release",
+				  description: "Demo website and desktop application (Proof of concept)",
+                  icon: "clarity:application-solid",
+                  date: "Q4 2023",
+				  compete: true
               },
               {
-                  title: "Goodbye",
-                  icon: "material-symbols:directions-boat-rounded",
-                  date: "May 31 2023",
+                  title: "Preview release",
+				  description: "Base functionality like publishing mods, commenting, etc.",
+                  icon: "mdi:beta",
+                  date: "Q2 2024",
               },
               {
-                  title: "Test",
+                  title: "1.0 release",
+				  description: "Advanced functionality - To be determined by user feedback",
+                  icon: "mdi:beta",
+                  date: "~Q4 2024",
               },
           ]
         : [
               // Russian
               {
-                  title: "Пока браточек",
-                  icon: "material-symbols:waving-hand-sharp",
-                  date: "September 1, 2023",
+                  title: "Демонстрация",
+				  description: "Демонастрация сайта и программы на ПК",
+                  icon: "clarity:application-solid",
+                  date: "IV кв. 2023",
+				  compete: true
               },
               {
-                  title: "Пока",
-                  icon: "material-symbols:directions-boat-rounded",
-                  date: "May 31 2023",
+                  title: "Предварительный релиз",
+				  description: "Базовый функционал, такой как публикация модов, оставление комментариев и т.п.",
+                  icon: "mdi:beta",
+                  date: "II кв. 2024",
               },
               {
-                  title: "Оп оп тест)",
+                  title: "Релиз 1.0",
+				  description: "Сложная функционал - будет определён запросами пользователей",
+                  icon: "mdi:beta",
+                  date: "~IV кв. 2024",
               },
           ];
 });
@@ -105,6 +117,7 @@ const finalCard = computed(() => {
             :index="index"
             :scroll="scroll.px"
         />
+		<div></div>
         <div
             class="end flex flex-col items-center justify-center"
             :class="{ enabled: scroll.percentage >= 95 }"

@@ -137,6 +137,7 @@ watch(locale, refreshSlides)
 	flex-direction: column;
 	align-items: center;
 	gap: 2rem;
+	padding-bottom: 3rem;
 }
 
 #hero-container {

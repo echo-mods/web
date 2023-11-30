@@ -157,13 +157,15 @@ router.afterEach(() => (mhOpen.value = false));
         </header>
     </Transition>
     <header :class="{ mobile: isMobile }">
-        <NuxtLink to="/" class="home">
-            <img class="primary" src="/logo.png" />
-            <img class="shadow" src="/logo.png" />
-            <img class="shadow" src="/logo.png" />
-            <img class="shadow" src="/logo.png" />
-            <img class="shadow" src="/logo.png" />
-        </NuxtLink>
+		<UChip text="DEMO" size="md" position="bottom-right">
+			<NuxtLink to="/" class="home">
+				<img class="primary" src="/logo.png" />
+				<img class="shadow" src="/logo.png" />
+				<img class="shadow" src="/logo.png" />
+				<img class="shadow" src="/logo.png" />
+				<img class="shadow" src="/logo.png" />
+			</NuxtLink>
+		</UChip>
         <template v-if="!isMobile">
             <div class="links">
                 <NuxtLink v-for="link in links" :to="link.route">

@@ -23,6 +23,7 @@ onMounted(() => {
                 <Icon v-if="data.icon" :name="data.icon"/>
                 <div class="text">
                     <h1>{{ data.title }}</h1>
+                    <h2 v-show="data.description">{{ data.description }}</h2>
                     <h2>{{ data.date }}</h2>
                 </div>
             </div>
@@ -75,7 +76,7 @@ onMounted(() => {
             flex-direction: column;
             h1 {
                 font-weight: 500;
-                font-size: 1.5rem;
+                font-size: 1.2rem;
                 color: rgb(var(--color-primary-500));
             }
             h2 {
@@ -87,6 +88,8 @@ onMounted(() => {
 }
 
 @media only screen and (max-width: 600px) {
+	.container {
+	}
     .dot {
         left: calc(20vw + 0.2rem) !important;
     }
@@ -94,6 +97,7 @@ onMounted(() => {
         translate: 0 0 !important;
     }
     .info {
+		max-width: 60vw;
         position: absolute;
         left: 20vw;
         translate: 4rem -50% !important;

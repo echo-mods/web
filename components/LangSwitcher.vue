@@ -3,7 +3,7 @@ const { locale: locale_g, setLocale } = useI18n()
 
 const route = useRoute()
 
-const isRussian = ref(locale_g.value === "ru")
+const isRussian = ref(locale_g.value !== "en")
 
 const animating: Ref<boolean> = useState("translation-animating")
 const animating_to_lang: Ref<string> = useState("translation-animating-target")
