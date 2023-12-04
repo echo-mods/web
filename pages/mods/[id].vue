@@ -28,7 +28,6 @@ if (!mod.value) {
     });
 }
 
-
 const setHead = (name?: string) => {
     useHead({
         title: name,
@@ -42,14 +41,22 @@ const handle_postgres_changes = (
     if (payload.table === "mods") {
         if (payload.eventType === "UPDATE") {
             const updatedArticle = payload.new as Mod;
-            const updatedID = updatedArticle.mod_id;
-            if (updatedID === mod_id) {
+            if (updatedArticle.mod_id === mod_id) {
+                const builds_preserve = mod.value["mod-builds"];
+                mod.value = updatedArticle;
+                mod.value["mod-builds"] = builds_preserve;
+            }
+        } else if (payload.eventType === "DELETE") {
+            const deletedArticle = payload.old as Mod;
+            if (deletedArticle.mod_id === mod_id) {
+                window.location.reload();
             }
         }
     } else if (payload.table === "mod-builds") {
-        const build = payload.new
-            ? (payload.new as ModBuild)
-            : (payload.old as ModBuild);
+        const build =
+            payload.eventType !== "DELETE"
+                ? (payload.new as ModBuild)
+                : (payload.old as ModBuild);
         switch (payload.eventType) {
             case "INSERT":
                 if (build.mod_id === mod_id) {
@@ -95,6 +102,32 @@ const listener = supabase
 watchEffect(() => {
     setHead(mod.value.name);
 });
+
+const linkHost = (link: string) => {
+	try {
+		const url = new URL(link);
+		const host = url.host;
+		return host;
+	} catch {
+		return link
+	}
+};
+
+const getIconForHost = (host: string) => {
+    let retval = "material-symbols:link";
+    if (host.includes("vk.com")) {
+        retval = "mdi:vk";
+    } else if (host.includes("youtube.com")) {
+        retval = "mdi:youtube";
+    } else if (host.includes("boosty.to")) {
+        retval = "simple-icons:boosty";
+    } else if (host.includes("t.me")) {
+        retval = "simple-icons:telegram";
+    }else if (host.includes("discord.gg")) {
+        retval = "simple-icons:discord";
+    }
+    return retval;
+};
 </script>
 
 <template>
@@ -104,15 +137,25 @@ watchEffect(() => {
             <div class="data-container">
                 <img class="background" :src="mod.thumbnail_url" />
                 <h1 v-once>{{ mod.name }}</h1>
+                <div class="socials">
+                    <UTooltip
+                        v-for="link in mod.social_urls"
+                        :text="linkHost(link)"
+                    >
+                        <UButton :to="link" target="_blank" variant="soft">
+                            <Icon :name="getIconForHost(linkHost(link))" />
+                        </UButton>
+                    </UTooltip>
+                </div>
                 <hr />
                 <p v-once>{{ mod.description }}</p>
                 <hr />
                 <!-- <p> Ratings will be added later
-                <Icon
-                    name="streamline:interface-favorite-star-reward-rating-rate-social-star-media-favorite-like-stars"
-                />
-                <span>{{ 5 }} / 10</span>
-            </p> -->
+					<Icon
+						name="streamline:interface-favorite-star-reward-rating-rate-social-star-media-favorite-like-stars"
+					/>
+					<span>{{ 5 }} / 10</span>
+            	</p> -->
                 <p>
                     <Icon name="iconoir:radiation" />
                     <span>{{ Platforms[mod.platform] }}</span>
@@ -129,13 +172,16 @@ watchEffect(() => {
         </div>
         <div class="builds">
             <div class="build" v-for="build in mod['mod-builds']">
-				<MarkdownForamatter>
-					<div>
-						<h1>{{ build.version.startsWith("v") ? "" : "v" }}{{ build.version }}</h1>
-						<hr>
-					</div>
-					<Mdc :value="build.changes" tag="div"/>
-				</MarkdownForamatter>
+                <MarkdownForamatter>
+                    <div>
+                        <h1>
+                            {{ build.version.startsWith("v") ? "" : "v"
+                            }}{{ build.version }}
+                        </h1>
+                        <hr />
+                    </div>
+                    <Mdc :value="build.changes" tag="div" />
+                </MarkdownForamatter>
             </div>
         </div>
     </div>
@@ -158,7 +204,9 @@ watchEffect(() => {
     width: calc(30% - 1rem);
     padding: 1rem;
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-height: 80vh;
 
     h1 {
         width: 100%;
@@ -184,13 +232,13 @@ watchEffect(() => {
         width: 5rem;
         aspect-ratio: 1;
     }
-
+    .socials {
+        display: flex;
+        gap: 0.5rem;
+    }
     .background {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+        position: fixed;
+        inset: 0;
         z-index: -1;
         opacity: 0.3;
         filter: blur(0.5rem);
@@ -229,15 +277,15 @@ watchEffect(() => {
 }
 
 .builds {
-	padding: 1rem 0;
-	display: flex;
-	flex-direction: column;
-	gap: 1rem;
-	.build {
-		padding: 1rem;
-		border-radius: 0.5rem;
-		border: 1px solid rgb(var(--color-primary-500) / 0.9);
-	}
+    padding: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    .build {
+        padding: 1rem;
+        border-radius: 0.5rem;
+        border: 1px solid rgb(var(--color-primary-500) / 0.9);
+    }
 }
 
 @media (max-width: 600px) {

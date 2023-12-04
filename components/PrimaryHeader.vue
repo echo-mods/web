@@ -77,14 +77,14 @@ watchEffect(() => {
             },
         ],
     ];
-	if (user.value) {
-		profile_menu.value.push([
-			{
-				label: profile_text,
-				to: `/profile/${useUsername(user.value)}`,
-			},
-		]);
-	}
+    if (user.value) {
+        profile_menu.value.push([
+            {
+                label: profile_text,
+                to: `/profile/${useUsername(user.value)}`,
+            },
+        ]);
+    }
     profile_menu.value.push([option_b.value]);
 });
 const show_profile_dropdown = true;
@@ -157,15 +157,15 @@ router.afterEach(() => (mhOpen.value = false));
         </header>
     </Transition>
     <header :class="{ mobile: isMobile }">
-		<UChip text="DEMO" size="md" position="bottom-right">
-			<NuxtLink to="/" class="home">
-				<img class="primary" src="/logo.png" />
-				<img class="shadow" src="/logo.png" />
-				<img class="shadow" src="/logo.png" />
-				<img class="shadow" src="/logo.png" />
-				<img class="shadow" src="/logo.png" />
-			</NuxtLink>
-		</UChip>
+        <UChip text="DEMO" size="md" position="bottom-right">
+            <NuxtLink to="/" class="home">
+                <img class="primary" src="/logo.png" />
+                <img class="shadow" src="/logo.png" />
+                <img class="shadow" src="/logo.png" />
+                <img class="shadow" src="/logo.png" />
+                <img class="shadow" src="/logo.png" />
+            </NuxtLink>
+        </UChip>
         <template v-if="!isMobile">
             <div class="links">
                 <NuxtLink v-for="link in links" :to="link.route">
@@ -227,7 +227,7 @@ router.afterEach(() => (mhOpen.value = false));
                     route.path.startsWith('/news/en')
                 )
             "
-            class="translation-effect"
+            class="translation-effect flex justify-center items-center"
             :class="{ slide: animating }"
         ></div>
         <TransitionGroup name="lang_indicator">
@@ -483,5 +483,11 @@ header {
 .fake-header {
     position: unset;
     opacity: 0;
+}
+
+@media (max-width: 650px) {
+    .translation-effect {
+        background-color: black;
+    }
 }
 </style>

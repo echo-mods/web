@@ -1,20 +1,59 @@
 <script setup lang="ts">
-import type { Mod } from '~/types/database';
+import type { Mod, ModBuild } from "~/types/database";
+import type { RealtimePostgresChangesPayload } from "@supabase/supabase-js";
 
 definePageMeta({
-    name: 'Explore',
-    ru_name: 'Моды',
-    horizonal_id: 4
-})
+    name: "Explore",
+    ru_name: "Моды",
+    horizonal_id: 4,
+});
 
 const supabase = useSupabaseClient();
 
-const { locale } = useI18n()
+const { locale } = useI18n();
 
-const pending = ref(true)
+const pending = ref(true);
 const { data: card_array } = await supabase.from("mods").select("*");
-const cards = card_array as Mod[]
-pending.value = false
+const cards = ref(card_array as Mod[]);
+pending.value = false;
+
+const handle_postgres_changes = (
+    payload: RealtimePostgresChangesPayload<{ [key: string]: any }>
+) => {
+    const mod = payload.eventType !== "DELETE" ? (payload.new as Mod) : (payload.old as Mod);
+    switch (payload.eventType) {
+        case "INSERT":
+			cards.value.push(mod)
+            break;
+        case "UPDATE":
+            cards.value.forEach(
+                (mod_checking: Mod, index: number) => {
+                    if (mod_checking.mod_id === mod.mod_id) {
+						cards.value[index] = mod
+                    }
+                }
+            );
+            break;
+        case "DELETE":
+            cards.value.forEach(
+                (mod_checking: Mod, index: number) => {
+                    if (mod_checking.mod_id === mod.mod_id) {
+						cards.value.splice(index, 1)
+                    }
+                }
+            );
+            break;
+    }
+};
+
+const listener = supabase
+    .channel("custom-all-channel")
+    .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "mods" },
+        handle_postgres_changes
+    )
+    .subscribe();
 </script>
 
 <template>
@@ -37,18 +76,27 @@ pending.value = false
                 <USkeleton class="w-[50%] h-7" />
             </div>
         </div>
-        <NuxtLink v-if="!pending" class="card" tag="div" v-for="(data, index) in cards" :to="`/mods/${data.mod_id}`">
-            <img v-once :src="data.thumbnail_url" class="background">
+        <NuxtLink
+            v-if="!pending"
+            class="card"
+            tag="div"
+            v-for="(data, index) in cards"
+            :to="`/mods/${data.mod_id}`"
+        >
+            <img v-once :src="data.thumbnail_url" class="background" />
             <div class="info-container">
                 <span v-once>
                     <Icon
-                        name="streamline:interface-favorite-star-reward-rating-rate-social-star-media-favorite-like-stars" />
+                        name="streamline:interface-favorite-star-reward-rating-rate-social-star-media-favorite-like-stars"
+                    />
                     {{ 5 }} / 10
                 </span>
-                <UPopover mode="hover" :popper="{ 'strategy': 'absolute' }">
+                <UPopover mode="hover" :popper="{ strategy: 'absolute' }">
                     <h2>{{ data.description }}</h2>
                     <template #panel>
-                        <p v-once style="margin: 1rem; text-align: center;">{{ data.description }}</p>
+                        <p v-once style="margin: 1rem; text-align: center">
+                            {{ data.description }}
+                        </p>
                     </template>
                 </UPopover>
             </div>
@@ -56,7 +104,7 @@ pending.value = false
         </NuxtLink>
         <ClientOnly>
             <div class="done">
-                <img v-if="locale === 'ru'" src="/done.png">
+                <img v-if="locale === 'ru'" src="/done.png" />
                 <h1>{{ $t("done") }}</h1>
             </div>
         </ClientOnly>
@@ -183,7 +231,6 @@ pending.value = false
 }
 
 @media (max-width: 600px) {
-
     .card,
     .card-placeholder {
         width: calc(100%);
