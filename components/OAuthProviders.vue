@@ -10,7 +10,7 @@ const authenticateWithOAuth = async (provider: Provider) => {
     await auth.signInWithOAuth({
         provider: provider,
 		options: {
-			redirectTo: window.location.origin + (props.redirect || "/")
+			redirectTo: window.location.origin + "/callback"
 		}
     });
 };

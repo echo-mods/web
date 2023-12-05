@@ -22,11 +22,11 @@ const ipc = useState("ipc_g", () => undefined)
 
 onMounted(async () => {
     try {
-        const ipcRenderer = useIpcRenderer()
+        const ipcRenderer = (globalThis as any).ipcRenderer
         const is_electron = await ipcRenderer.invoke("is_electron")
         if (is_electron) ipc.value = ipcRenderer
         else ipc.value = undefined
-    } catch { ipc.value = undefined }
+    } catch (err) { console.log(err); ipc.value = undefined }
     document.documentElement.classList.add("dark")
 })
 </script>

@@ -16,12 +16,14 @@ const electron_assumption = !!route.query["electron"]
 </script>
 
 <template>
-    <PrimaryHeader v-if="!inElectron && ipc !== null || !electron_assumption"/>
-    <div id="electron-topbar" v-else-if="ipc !== null">
-        <div class="draggable"></div>
-        <UButton @click="closeElectron" variant="link" icon="i-heroicons-x-mark-solid"/>
-    </div>
-    <slot v-if="!inElectron || route.path.startsWith('/auth')"/>
+    <template v-if="!route.path.startsWith('/callback')">
+        <PrimaryHeader v-if="(!inElectron && ipc !== null || !electron_assumption)"/>
+        <div id="electron-topbar" v-else-if="ipc !== null">
+            <div class="draggable"></div>
+            <UButton @click="closeElectron" variant="link" icon="i-heroicons-x-mark-solid"/>
+        </div>
+
+    </template>    <slot v-if="!inElectron || route.path.startsWith('/auth')"/>
     <Transition name="g_slideshow">
         <ContentSlideshow
             v-if="fs_state"
