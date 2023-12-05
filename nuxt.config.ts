@@ -16,6 +16,9 @@ export default defineNuxtConfig({
         "/mods": {
             redirect: "/explore"
         },
+        "/auth/*": {
+            cors: true
+        },
     },
 	supabase: {
 		redirect: false
