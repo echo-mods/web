@@ -175,7 +175,7 @@ router.afterEach(() => (mhOpen.value = false));
                 </NuxtLink>
             </div>
             <div class="right">
-                <a download="" class="download_btn" href="/" target="_blank">
+                <a class="download_btn" href="https://github.com/echo-mods/core/releases" target="_blank">
                     <UButton>{{ $t("call_to_download") }}</UButton>
                 </a>
                 <div class="divider" />

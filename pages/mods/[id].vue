@@ -168,6 +168,11 @@ const getIconForHost = (host: string) => {
                     <Icon name="carbon:thumbs-up" />
                     <span>{{ $t("req_false") }}</span>
                 </p>
+                <hr />
+				<UButton variant="soft" :to="`echomods://?action=openmod&id=${mod.mod_id}`">
+					<Icon name="ph:desktop-thin"/>
+					{{ $t('open_in_desktop') }}
+				</UButton>
             </div>
         </div>
         <div class="builds">
@@ -199,6 +204,9 @@ const getIconForHost = (host: string) => {
 }
 
 .data-container {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
     border-radius: 8px;
     border: 1px rgba(255, 255, 255, 0.3) solid;
     width: calc(30% - 1rem);
@@ -244,35 +252,6 @@ const getIconForHost = (host: string) => {
         filter: blur(0.5rem);
         object-fit: cover;
         object-position: center;
-    }
-
-    button {
-        font-weight: 100;
-        transition: all 0.3s;
-        border-radius: 8px;
-        padding: 1px;
-        margin-top: 1rem;
-
-        div {
-            padding: 0.5rem 1.5rem;
-            background-color: rgb(10, 10, 10);
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
-
-        background: linear-gradient(
-            55deg,
-            rgb(255, 81, 0) 0%,
-            rgb(255, 136, 0) 100%
-        );
-    }
-
-    button:hover {
-        background: linear-gradient(
-            -30deg,
-            rgb(255, 81, 0) 0%,
-            rgb(255, 136, 0) 100%
-        );
     }
 }
 

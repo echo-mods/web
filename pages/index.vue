@@ -43,7 +43,7 @@ const refreshSlides = async () => {
                     },
                     subtitle: content.value["homepage_subtitle"],
                     content: content.value["description"],
-                    image_filters: content.value["homepage_iamge_filters"],
+                    image_filters: content.value["homepage_image_filters"],
                     short_title: content.value["topic"],
                     article_url: `/news/${locale.value}/${path}`,
                     id: parseInt(i)

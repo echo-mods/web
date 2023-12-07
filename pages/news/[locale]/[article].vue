@@ -83,14 +83,20 @@ watchEffect(() => {
         border-radius: 0.5rem;
         outline: 1px solid rgba(255, 255, 255, 0.3);
     }
+	ul, ol {
+		margin: 1.5rem 0;
+	}
     li {
         list-style: initial;
         margin-left: 2rem;
     }
+	a {
+		color: rgb(var(--color-primary-DEFAULT));
+	}
     blockquote {
         padding: 1px 1rem;
-        border-left: 1px solid rgba(255,255,255,0.3);
-        border-right: 1px solid rgba(255,255,255,0.3);
+        border-left: 1px solid rgb(var(--color-primary-DEFAULT) / 0.3);
+        border-right: 1px solid rgb(var(--color-primary-DEFAULT) / 0.3);
         border-radius: 1rem;
         width: fit-content;
         > p {

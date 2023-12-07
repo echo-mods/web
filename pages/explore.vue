@@ -57,58 +57,60 @@ const listener = supabase
 </script>
 
 <template>
-    <section id="explore">
-        <!-- Page containing mods -->
-        <div v-if="pending" class="placeholder-container">
-            <div class="card-placeholder">
-                <USkeleton class="w-[100%] h-4" />
-                <USkeleton class="w-[30%] h-5" />
-                <USkeleton class="w-[50%] h-7" />
-            </div>
-            <div class="card-placeholder">
-                <USkeleton class="w-[100%] h-4" />
-                <USkeleton class="w-[30%] h-5" />
-                <USkeleton class="w-[50%] h-7" />
-            </div>
-            <div class="card-placeholder">
-                <USkeleton class="w-[100%] h-4" />
-                <USkeleton class="w-[30%] h-5" />
-                <USkeleton class="w-[50%] h-7" />
-            </div>
-        </div>
-        <NuxtLink
-            v-if="!pending"
-            class="card"
-            tag="div"
-            v-for="(data, index) in cards"
-            :to="`/mods/${data.mod_id}`"
-        >
-            <img v-once :src="data.thumbnail_url" class="background" />
-            <div class="info-container">
-                <span v-once>
-                    <Icon
-                        name="streamline:interface-favorite-star-reward-rating-rate-social-star-media-favorite-like-stars"
-                    />
-                    {{ 5 }} / 10
-                </span>
-                <UPopover mode="hover" :popper="{ strategy: 'absolute' }">
-                    <h2>{{ data.description }}</h2>
-                    <template #panel>
-                        <p v-once style="margin: 1rem; text-align: center">
-                            {{ data.description }}
-                        </p>
-                    </template>
-                </UPopover>
-            </div>
-            <h1>{{ data.name }}</h1>
-        </NuxtLink>
-        <ClientOnly>
-            <div class="done">
-                <img v-if="locale === 'ru'" src="/done.png" />
-                <h1>{{ $t("done") }}</h1>
-            </div>
-        </ClientOnly>
-    </section>
+	<div class="__explore">
+		<section id="explore">
+			<!-- Page containing mods -->
+			<div v-if="pending" class="placeholder-container">
+				<div class="card-placeholder">
+					<USkeleton class="w-[100%] h-4" />
+					<USkeleton class="w-[30%] h-5" />
+					<USkeleton class="w-[50%] h-7" />
+				</div>
+				<div class="card-placeholder">
+					<USkeleton class="w-[100%] h-4" />
+					<USkeleton class="w-[30%] h-5" />
+					<USkeleton class="w-[50%] h-7" />
+				</div>
+				<div class="card-placeholder">
+					<USkeleton class="w-[100%] h-4" />
+					<USkeleton class="w-[30%] h-5" />
+					<USkeleton class="w-[50%] h-7" />
+				</div>
+			</div>
+			<NuxtLink
+				v-if="!pending"
+				class="card"
+				tag="div"
+				v-for="(data, index) in cards"
+				:to="`/mods/${data.mod_id}`"
+			>
+				<img v-once :src="data.thumbnail_url" class="background" />
+				<div class="info-container">
+					<span v-once>
+						<Icon
+							name="streamline:interface-favorite-star-reward-rating-rate-social-star-media-favorite-like-stars"
+						/>
+						{{ 5 }} / 10
+					</span>
+					<UPopover mode="hover" :popper="{ strategy: 'absolute' }">
+						<h2>{{ data.description }}</h2>
+						<template #panel>
+							<p v-once style="margin: 1rem; text-align: center">
+								{{ data.description }}
+							</p>
+						</template>
+					</UPopover>
+				</div>
+				<h1>{{ data.name }}</h1>
+			</NuxtLink>
+			<ClientOnly>
+				<div class="done">
+					<img v-if="locale === 'ru'" src="/done.png" />
+					<h1>{{ $t("done") }}</h1>
+				</div>
+			</ClientOnly>
+		</section>
+	</div>
 </template>
 
 <style scoped lang="scss">

@@ -40,6 +40,7 @@ onMounted(() => {
     .dot {
         position: absolute;
         background-color: rgb(var(--color-primary-500));
+		box-shadow: 0 0 1rem 0.5rem rgb(var(--color-primary-500) / 0.5);;
         width: 1.2rem;
         height: 1.2rem;
         border-radius: 2rem;

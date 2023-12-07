@@ -37,6 +37,7 @@ export default defineI18nConfig(() => ({
 			username_word: "Имя пользователя",
 			conf_sent_title: "Мы выслали письмо-подтверждение вам на почту",
 			conf_sent_text: "Если не видите письмо, проверте папку 'спам'.",
+			open_in_desktop: "Открыть в десктоп версии",
         },
         en: {
             "null": "",
@@ -73,7 +74,8 @@ export default defineI18nConfig(() => ({
             rm_hero: "Roadmap",
 			username_word: "Username",
 			conf_sent_title: "Confirmation letter sent",
-			conf_sent_text: "Check your email for a confirmation letter. Be sure to check your spam if you don't see a letter right away."
+			conf_sent_text: "Check your email for a confirmation letter. Be sure to check your spam if you don't see a letter right away.",
+			open_in_desktop: "Open in EchoMods desktop",
         },
     },
 }));
