@@ -4,33 +4,30 @@ const fs_state = useState<boolean>("fs_content_state", () => false);
 const fs_content = useState<string[]>("fs_content_content", () => []);
 const fs_index = useState<number>("fs_content_index", () => 0);
 
-const ipc = useState<any>("ipc_g", () => null)
-const inElectron = computed(() => !!ipc.value)
+const route = useRoute()
+const inElectron = ref(!!route.query.electron)
 
 const closeElectron = () => {
     window.close()
 }
-const route = useRoute()
 
-const electron_assumption = !!route.query["electron"]
+onMounted(() => {
+    inElectron.value = !!window.ipcRenderer
+})
 </script>
 
 <template>
     <template v-if="!route.path.startsWith('/callback')">
-        <PrimaryHeader v-if="(!inElectron && ipc !== null || !electron_assumption)"/>
-        <div id="electron-topbar" v-else-if="ipc !== null">
+        <PrimaryHeader v-if="(!inElectron)" />
+        <div id="electron-topbar" v-else>
             <div class="draggable"></div>
-            <UButton @click="closeElectron" variant="link" icon="i-heroicons-x-mark-solid"/>
+            <UButton @click="closeElectron" variant="link" icon="i-heroicons-x-mark-solid" />
         </div>
 
-    </template>    <slot v-if="!inElectron || route.path.startsWith('/auth')"/>
+    </template>
+    <slot v-if="!inElectron || route.path.startsWith('/auth')" />
     <Transition name="g_slideshow">
-        <ContentSlideshow
-            v-if="fs_state"
-            :content="fs_content"
-            :startingIndex="fs_index"
-            :isGlobalHandler="true"
-        />
+        <ContentSlideshow v-if="fs_state" :content="fs_content" :startingIndex="fs_index" :isGlobalHandler="true" />
     </Transition>
 </template>
 
@@ -47,6 +44,7 @@ footer {
     height: 3rem;
     border-bottom: 1px solid rgb(var(--color-primary-DEFAULT));
     padding: 0 1rem;
+
     .draggable {
         width: 100%;
         height: 100%;

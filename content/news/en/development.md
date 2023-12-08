@@ -19,6 +19,6 @@ That person is in fact the same person who is writing this post.
 - The website is written in Vue 3 + Nuxt 3 + TypeScript.
 - The desktop app is written in Vue 3 + Electron.
 
-If you are interested, please feel free to [navigate to our GitHub](https://github.com/echo-mods/core), we welcome issues and pull requests!
+If you are interested, please feel free to [navigate to our GitHub](https://github.com/echo-mods), we welcome issues and pull requests!
 
 > Please not that the whole project is kind of a mess since we have very limited resources... Hopefully **you** can help with that!

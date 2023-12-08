@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const ipc = useState("ipc_g", () => undefined)
+const ipc = useState("ipc_g", () => false)
 
 const router = useRouter()
 

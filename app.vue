@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import '@/assets/css/tailwind.css'
-import { useIpcRenderer } from '@vueuse/electron'
 
 const { locale } = useI18n()
 const route = useRoute()
@@ -18,15 +17,12 @@ watchEffect(() => {
     })
 })
 
-const ipc = useState("ipc_g", () => undefined)
+const ipc = useState<boolean>("ipc_g", () => false)
 
 onMounted(async () => {
     try {
-        const ipcRenderer = (globalThis as any).ipcRenderer
-        const is_electron = await ipcRenderer.invoke("is_electron")
-        if (is_electron) ipc.value = ipcRenderer
-        else ipc.value = undefined
-    } catch (err) { console.log(err); ipc.value = undefined }
+        ipc.value = !!window.ipcRenderer
+    } catch (err) { }
     document.documentElement.classList.add("dark")
 })
 </script>
