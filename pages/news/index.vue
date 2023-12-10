@@ -253,5 +253,8 @@ hr {
     .card {
         width: 100% !important;
     }
+	.spotlight, .grid {
+		max-width: 100%;
+	}
 }
 </style>

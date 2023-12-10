@@ -104,13 +104,13 @@ watchEffect(() => {
 });
 
 const linkHost = (link: string) => {
-	try {
-		const url = new URL(link);
-		const host = url.host;
-		return host;
-	} catch {
-		return link
-	}
+    try {
+        const url = new URL(link);
+        const host = url.host;
+        return host;
+    } catch {
+        return link;
+    }
 };
 
 const getIconForHost = (host: string) => {
@@ -123,7 +123,7 @@ const getIconForHost = (host: string) => {
         retval = "simple-icons:boosty";
     } else if (host.includes("t.me")) {
         retval = "simple-icons:telegram";
-    }else if (host.includes("discord.gg")) {
+    } else if (host.includes("discord.gg")) {
         retval = "simple-icons:discord";
     }
     return retval;
@@ -169,10 +169,13 @@ const getIconForHost = (host: string) => {
                     <span>{{ $t("req_false") }}</span>
                 </p>
                 <hr />
-				<UButton variant="soft" :to="`echomods://?action=openmod&id=${mod.mod_id}`">
-					<Icon name="ph:desktop-thin"/>
-					{{ $t('open_in_desktop') }}
-				</UButton>
+                <UButton
+                    variant="soft"
+                    :to="`echomods://?action=openmod&id=${mod.mod_id}`"
+                >
+                    <Icon name="ph:desktop-thin" />
+                    {{ $t("open_in_desktop") }}
+                </UButton>
             </div>
         </div>
         <div class="builds">
@@ -200,75 +203,75 @@ const getIconForHost = (host: string) => {
         display: flex;
         flex-wrap: wrap;
         gap: 1rem;
-    }
-}
+        .data-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            border-radius: 8px;
+            border: 1px rgba(255, 255, 255, 0.3) solid;
+            width: calc(30% - 1rem);
+            padding: 1rem;
+            position: relative;
+            overflow-x: hidden;
+            overflow-y: auto;
+            max-height: 80vh;
 
-.data-container {
-	display: flex;
-	flex-direction: column;
-	gap: 0.5rem;
-    border-radius: 8px;
-    border: 1px rgba(255, 255, 255, 0.3) solid;
-    width: calc(30% - 1rem);
-    padding: 1rem;
-    position: relative;
-    overflow-x: hidden;
-    overflow-y: auto;
-    max-height: 80vh;
+            h1 {
+                width: 100%;
+                text-align: center;
+                font-size: 2rem;
+                font-weight: 600;
+            }
 
-    h1 {
-        width: 100%;
-        text-align: center;
-        font-size: 2rem;
-        font-weight: 600;
-    }
+            p {
+                font-weight: 200;
+            }
 
-    p {
-        font-weight: 200;
-    }
+            hr {
+                margin: 0.5rem 0;
+                opacity: 0.5;
+            }
 
-    hr {
-        margin: 0.5rem 0;
-        opacity: 0.5;
-    }
+            span {
+                margin-left: 0.5rem;
+            }
 
-    span {
-        margin-left: 0.5rem;
+            .logo {
+                width: 5rem;
+                aspect-ratio: 1;
+            }
+            .socials {
+                display: flex;
+                gap: 0.5rem;
+            }
+            .background {
+                position: fixed;
+                inset: 0;
+                z-index: -1;
+                opacity: 0.3;
+                filter: blur(0.5rem);
+                object-fit: cover;
+                object-position: center;
+                height: 100%;
+				width: 100%;
+            }
+        }
     }
-
-    .logo {
-        width: 5rem;
-        aspect-ratio: 1;
-    }
-    .socials {
+    .builds {
+        padding: 1rem 0;
         display: flex;
-        gap: 0.5rem;
-    }
-    .background {
-        position: fixed;
-        inset: 0;
-        z-index: -1;
-        opacity: 0.3;
-        filter: blur(0.5rem);
-        object-fit: cover;
-        object-position: center;
-    }
-}
-
-.builds {
-    padding: 1rem 0;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    .build {
-        padding: 1rem;
-        border-radius: 0.5rem;
-        border: 1px solid rgb(var(--color-primary-500) / 0.9);
+        flex-direction: column;
+        gap: 1rem;
+        .build {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid rgb(var(--color-primary-500) / 0.9);
+        }
     }
 }
 
 @media (max-width: 600px) {
-    .data-container {
+    .__mod-details .data-container {
         width: 100%;
     }
 }

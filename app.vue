@@ -1,30 +1,55 @@
 <script setup lang="ts">
-import '@/assets/css/tailwind.css'
+import "@/assets/css/tailwind.css";
 
-const { locale } = useI18n()
-const route = useRoute()
+const { locale } = useI18n();
+const route = useRoute();
 
-const currentNewsArticleTitle = useState("newsArticleTitle", () => undefined)
+const { description } = useAppConfig();
+
+useSeoMeta({
+    description: description as string,
+    ogTitle:
+        locale.value === "en" ? `${route.meta.name}` : `${route.meta.ru_name}`,
+    ogDescription: description as string,
+    ogImage: "/banner.png",
+    ogUrl: route.fullPath,
+});
+
+const currentNewsArticleTitle = useState("newsArticleTitle", () => undefined);
 
 watchEffect(() => {
     useHeadSafe({
-        title: locale.value === "en" ? `${route.meta.name}` : `${route.meta.ru_name}`,
+        htmlAttrs: {
+            lang: locale.value,
+        },
+        title:
+            locale.value === "en"
+                ? `${route.meta.name}`
+                : `${route.meta.ru_name}`,
         titleTemplate: (titleChunk) => {
-			const defined = titleChunk !== "undefined" && titleChunk !== undefined
-            if (!defined && currentNewsArticleTitle.value !== undefined) { return `${currentNewsArticleTitle.value} | EchoMods` }
-            return defined ? `${titleChunk} | EchoMods` : 'EchoMods';
-        }
-    })
-})
-
-const ipc = useState<boolean>("ipc_g", () => false)
+            const defined =
+                titleChunk !== "undefined" && titleChunk !== undefined;
+            if (!defined && currentNewsArticleTitle.value !== undefined) {
+                return `${currentNewsArticleTitle.value} | EchoMods`;
+            }
+            return defined ? `${titleChunk} | EchoMods` : "EchoMods";
+        },
+    });
+});
+const ipc = useState("ipc_g", () => undefined);
 
 onMounted(async () => {
     try {
-        ipc.value = !!window.ipcRenderer
-    } catch (err) { }
-    document.documentElement.classList.add("dark")
-})
+        const ipcRenderer = (globalThis as any).ipcRenderer;
+        const is_electron = await ipcRenderer.invoke("is_electron");
+        if (is_electron) ipc.value = ipcRenderer;
+        else ipc.value = undefined;
+    } catch (err) {
+        console.log(err);
+        ipc.value = undefined;
+    }
+    document.documentElement.classList.add("dark");
+});
 </script>
 
 <template>
@@ -35,8 +60,8 @@ onMounted(async () => {
 </template>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400&family=Rubik+Vinyl&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;600;700;800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400&family=Rubik+Vinyl&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;600;700;800&display=swap");
 
 @font-face {
     font-family: Stalker;
@@ -58,7 +83,10 @@ html {
 body {
     margin: 0;
     background-color: rgb(10, 10, 10);
-    background-image: radial-gradient(rgba(255, 255, 255, 0.2) 0.6px, rgba(0, 0, 0, 0) 0.5px);
+    background-image: radial-gradient(
+        rgba(255, 255, 255, 0.2) 0.6px,
+        rgba(0, 0, 0, 0) 0.5px
+    );
     background-size: 20px 20px;
     width: 100%;
 }
