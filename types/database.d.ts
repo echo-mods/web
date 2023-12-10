@@ -10,6 +10,7 @@ export interface ModBuild {
     version: string, // Фактическая версия мода (Например "v1.3.2")
     changes: string, // Возможно описание изменений в markdown / html
 	exec_path: string,
+	major: boolean,
 }
 
 export interface Mod {
