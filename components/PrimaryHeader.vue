@@ -25,6 +25,11 @@ const links = [
         ru_text: "Моды",
         route: "/explore",
     },
+    {
+        text: "Files",
+        ru_text: "Файлы",
+        route: "/files",
+    },
 ];
 
 let profile_text = ref("");

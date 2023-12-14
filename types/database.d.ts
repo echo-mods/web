@@ -13,6 +13,15 @@ export interface ModBuild {
 	major: boolean,
 }
 
+export interface DBFile {
+	file_id: number,
+	created_at: string,
+    name: string, // Название файла
+	description: string,
+	download_url: string,
+	thumbnail_url: string
+}
+
 export interface Mod {
 	mod_id: number,
 	created_at: string,
