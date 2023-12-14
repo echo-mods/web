@@ -40,9 +40,8 @@ const ipc = useState("ipc_g", () => undefined);
 
 onMounted(async () => {
     try {
-        const ipcRenderer = (globalThis as any).ipcRenderer;
-        const is_electron = await ipcRenderer.invoke("is_electron");
-        if (is_electron) ipc.value = ipcRenderer;
+        const is_electron = !!(window as any).ipcRenderer;
+        if (is_electron) ipc.value = is_electron;
         else ipc.value = undefined;
     } catch (err) {
         console.log(err);
